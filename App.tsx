@@ -1,60 +1,50 @@
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import LoginScreen from './src/Screens/LoginScreen'; // 로그인 화면
+import SignUpIdScreen from './src/Screens/SignUpIdScreen'; // 아이디 입력 화면
+import SignUpPasswordScreen from './src/Screens/SignUpPasswordScreen'; // 비밀번호 입력 화면
+import SignUpEmailScreen from './src/Screens/SignUpEmailScreen'; // 이메일 입력 화면
+import SignUpNicknameScreen from './src/Screens/SignUpNicknameScreen'; // 닉네임 입력 화면
+import SignUpCompleteScreen from './src/Screens/SignUpCompleteScreen'; // 회원가입 성공 화면
+import FindMyIdScreen from './src/Screens/FindMyIdScreen'; // 아이디 찾기 화면
+import FindMyIdCompleteScreen from './src/Screens/FindMyIdCompleteScreen'; // 아이디 찾기 완료 화면 추가
+import FindMyPasswordScreen from './src/Screens/FindMyPasswordScreen'; // 비밀번호 찾기 화면
+import MainPageScreen from './src/Screens/MainPageScreen'; // 메인 페이지
 
-import {fontPercentage} from './src/common/deviceUtils';
-import {palette} from './src/common/palette';
-import {createStackNavigator} from '@react-navigation/stack';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {NavigationContainer} from '@react-navigation/native';
-import {HeaderButton} from './src/components/layout/Header';
-
-import headerStyles from './src/components/layout/HeaderStyles';
-
-import Dev1 from './src/pages/Dev1';
-import Dev2 from './src/pages/Dev2';
-import Dev3 from './src/pages/Dev3';
-import Dev4 from './src/pages/Dev4';
-
-export type ScreenProps = {
-  route: any;
-  navigation: StackNavigationProp<any>;
+// 네비게이션 스택에 사용할 타입 정의
+export type RootStackParamList = {
+  Login: undefined;
+  SignUpId: { email: string }; // 이메일을 전달하기 위한 타입
+  SignUpEmail: undefined;
+  SignUpPassword: { email: string }; // 이메일을 전달하기 위한 타입
+  SignUpNickname: undefined;
+  SignUpComplete: undefined;
+  FindMyId: { email: string }; // 이메일을 전달하기 위한 타입
+  FindMyIdComplete: { email: string; id: string }; // 찾은 아이디를 전달하기 위한 타입
+  FindMyPassword: undefined;
+  MainPageScreen: undefined;
 };
 
-const Stack = createStackNavigator<any>();
+const Stack = createStackNavigator<RootStackParamList>();
 
-const MenuItem = (name: string, component: any, title?: string) => {
-  return (
-    <Stack.Screen
-      name={name}
-      component={component}
-      options={({navigation}) => ({
-        headerShown: true,
-        title: title,
-        headerBackTitleVisible: false,
-        headerRight: () => (
-          <HeaderButton navigation={navigation} home={false} />
-        ),
-      })}
-    />
-  );
-};
-
-function App(): React.JSX.Element {
+const App: React.FC = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Dev1"
-        screenOptions={{
-          headerStyle: headerStyles.headerColor,
-          headerTintColor: palette.white,
-          headerTitleStyle: {fontWeight: 'bold', fontSize: fontPercentage(50)},
-        }}>
-        {MenuItem('Dev1', Dev1, '개발자용1')}
-        {MenuItem('Dev2', Dev2, '개발자용2')}
-        {MenuItem('Dev3', Dev3, '개발자용3')}
-        {MenuItem('Dev4', Dev4, '개발자용4')}
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="SignUpId" component={SignUpIdScreen} />
+        <Stack.Screen name="SignUpPassword" component={SignUpPasswordScreen} />
+        <Stack.Screen name="SignUpEmail" component={SignUpEmailScreen} />
+        <Stack.Screen name="SignUpNickname" component={SignUpNicknameScreen} />
+        <Stack.Screen name="SignUpComplete" component={SignUpCompleteScreen} />
+        <Stack.Screen name="FindMyId" component={FindMyIdScreen} />
+        <Stack.Screen name="FindMyIdCompleteScreen" component={FindMyIdCompleteScreen} /> {/* 추가 */}
+        <Stack.Screen name="FindMyPassword" component={FindMyPasswordScreen} />
+        <Stack.Screen name="MainPageScreen" component={MainPageScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 export default App;
