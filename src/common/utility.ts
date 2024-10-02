@@ -3,6 +3,7 @@ import api, { UniResponse } from "./api";
 import { Dictionary } from "./types";
 import { globalContext } from "./globalContext";
 import { buildCacheKey, fromCache } from "./cache";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const langList: readonly string[] = ["ko-KR", "vi-VN", "en-US"];
 export const emojiList: readonly string[] = ["🇰🇷", "🇻🇳", "🇺🇸"];
@@ -180,10 +181,10 @@ export const nullGuard = (val: any, defaultValue: any = "") => {
   return val;
 }
 
-export const executeIdle = (fn: () => void) => {
+export const executeIdle = (fn: () => void, ms: number = 10) => {
   setTimeout(() => {
     fn();
-  }, 10);
+  }, ms);
 }
 
 export const toQueryString = (param: Dictionary) => {
@@ -231,6 +232,62 @@ export const listToCamelCase = (list: Dictionary[]) => {
   return list.map((x) => jsonToCamelCase(x));
 }
 
+export const toKebabCase = (str: string) => {
+  return str.replace(/([A-Z])/g, "-$1").toLowerCase().split("-").filter(x => x != "").join("-");
+}
+
 export const merge = (a: any[], b: any[], i = 0) => {
   return a.slice(0, i).concat(b, a.slice(i));
 }
+
+
+export const randomString = (length: number) : string => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * 47 * 73  %  characters.length);
+      result += characters[randomIndex];
+  }
+  return result;
+}
+
+export const compareVersions = (currentVersion: string, latestVersion: string): boolean => {
+  const currentVersionParts = currentVersion.split('.').map(Number);
+  const latestVersionParts = latestVersion.split('.').map(Number);
+
+  for (let i = 0; i < Math.max(currentVersionParts.length, latestVersionParts.length); i++) {
+    const current = currentVersionParts[i] || 0;
+    const latest = latestVersionParts[i] || 0;
+
+    if (current > latest) {
+      return true;
+    } else if (current < latest) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+export const toStorage = async (dic: Dictionary) => {
+  const entries = Object.entries(dic);
+  const pairs: [string, string][] = entries.map(([key, value]) => [key, JSON.stringify(value)]); 
+
+  AsyncStorage.multiSet(pairs);
+}
+
+export const fromStorage = async (keys: string[]) => {    
+  const pairs = await AsyncStorage.multiGet(keys);
+  const dic: Dictionary = {};
+
+  pairs.forEach(([key, value]) => {
+    dic[key] = JSON.parse(value || 'null');
+  });
+
+  return dic;
+}
+
+export const removeStorage = async (keys: string[]) => {
+  await AsyncStorage.multiRemove(keys);
+}
+

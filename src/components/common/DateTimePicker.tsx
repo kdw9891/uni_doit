@@ -1,5 +1,5 @@
-import {forwardRef, useRef, useState} from 'react';
-import {widthPercentage} from '../../common/deviceUtils';
+import {forwardRef, useEffect, useRef, useState} from 'react';
+import {setWidth} from '../../common/deviceUtils';
 import {palette} from '../../common/palette';
 import {Pressable, StyleSheet, TextInput, View} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -16,6 +16,16 @@ const DateTimePicker = forwardRef((props: any, ref: any) => {
   const [value, setValue] = useState<string>('');
   const valueRef = useRef<string>('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const clearRef = useRef<any>('');
+
+
+  useEffect(() => {
+    if(defaultValue) {
+      valueRef.current = defaultValue;
+      setValue(defaultValue);
+      form.setValue(name, defaultValue);
+    }
+  },[defaultValue])
 
   const toggleDatePicker = (isShow: boolean) => {
     setDatePickerVisibility(isShow);
@@ -65,11 +75,19 @@ const DateTimePicker = forwardRef((props: any, ref: any) => {
     form.setValue(name, text);
   };
 
+
+  form.clearFnDic[name] = () => {
+    clearRef.current.clear();
+    setValue('')
+    valueRef.current = '';
+    
+  }
+
   return (
     <>
       <View style={styles.container}>
         <TextInput
-          ref={ref}
+          ref={clearRef}
           defaultValue={value}
           onChangeText={textChangeHandler}
           showSoftInputOnFocus={false}
@@ -84,7 +102,7 @@ const DateTimePicker = forwardRef((props: any, ref: any) => {
           style={{...{position: 'absolute', right: 20, top: 15}, ...iconStyle}}>
           <Icon
             name="calendar"
-            size={widthPercentage(32)}
+            size={setWidth(32)}
             color={palette.black}
           />
         </Pressable>

@@ -15,8 +15,8 @@ export interface UniResponse<T = any, D = any> {
 
 const api: <T>(method: HttpMethod, url: string, params: {} | [] | FormData) =>
   Promise<UniResponse<T, any>> = (method, url, params) => {
-  if (!url.startsWith("/api"))
-    url = `/api${!url.startsWith("/") ? "/" + url : url}`;
+  if (!url.startsWith("/doit"))
+    url = `/doit${!url.startsWith("/") ? "/" + url : url}`;
   
   const headers = {
     Authorization: `Bearer ${globalContext.autoToken}`,
@@ -48,7 +48,7 @@ axios.interceptors.response.use(response => {
 },
 error => {
   if(error.response?.data == "TokenExpired"){
-    if(globalContext.autoToken){
+    if(globalContext.autoToken){ 
       globalContext.autoToken = null;
       Alert.alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
       //TODO:route to home

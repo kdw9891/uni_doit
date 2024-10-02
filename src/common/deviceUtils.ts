@@ -1,5 +1,4 @@
 import {PixelRatio, Platform, Dimensions} from 'react-native';
-import {palette} from './palette';
 import {responsiveScreenHeight, responsiveScreenWidth, responsiveScreenFontSize} from 'react-native-responsive-dimensions';
 
 // Pixel Ratio
@@ -26,43 +25,19 @@ export const deviceHeight: number = height;
 const windowWidth = 320;
 const windowHeight = 568;
 
-// width(변경 전 변수명)
-export function widthPercentage(width: number): number {
+export function setWidth(width: number): number {
   const percentage = (width / windowWidth) * 100;
 
   return responsiveScreenWidth(percentage);
 }
 
-// height(변경 전 변수명)
-export function heightPercentage(height: number): number {
+export function setHeight(height: number): number {
   const percentage = (height / windowHeight) * 100;
 
   return responsiveScreenHeight(percentage);
 }
 
-// width(변경 예정 변수명)
-function setWidth(width: number): number {
-  const percentage = (width / windowWidth) * 100;
-
-  return responsiveScreenWidth(percentage);
-}
-
-// height(변경 예정 변수명)
-function setHeight(height: number): number {
-  const percentage = (height / windowHeight) * 100;
-
-  return responsiveScreenHeight(percentage);
-}
-
-// font size (변경 전 변수명)
-export function fontPercentage(size: number): number {
-  const percentage = pixelRatio * (size * 0.02);
-
-  return responsiveScreenFontSize(percentage);
-}
-
-// font size (변경 예정 변수명)
-function fontSize(size: number): number {
+export function fontSize(size: number): number {
   const percentage = pixelRatio * (size * 0.02);
 
   return responsiveScreenFontSize(percentage);
