@@ -1,19 +1,16 @@
-import { TouchableOpacity } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-
+import {TouchableOpacity} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 
 interface BackgroundProps {
   children: React.ReactNode;
+  viewStyle?: any;
 }
 
-
-const ScrollArea : React.FC<BackgroundProps> = ({children }) => {
+const ScrollArea: React.FC<BackgroundProps> = ({children, viewStyle}) => {
   return (
-    <ScrollView>
-      <TouchableOpacity  activeOpacity={1}>
-        {children}
-      </TouchableOpacity>
+    <ScrollView style={{width:"100%"}}>
+      <TouchableOpacity activeOpacity={1}>{children}</TouchableOpacity>
     </ScrollView>
   );
-}
+};
 export default ScrollArea;

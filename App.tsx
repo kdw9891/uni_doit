@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, StackNavigationProp} from '@react-navigation/stack';
 
 import Home from './src/pages/home/Home';
-import Store from './src/pages/store/Store';
+import Loading from './src/pages/Loading/Loading';
 import StudyTimer from './src/pages/study/time/StudyTimer';
 import TodoList from './src/pages/study/todo/TodoList';
 
@@ -32,7 +32,7 @@ const ScreenItem = (
 function App(): React.JSX.Element {
   const ScreenList: any[] = [
     ScreenItem('Home', Home, 'Home', false),
-    ScreenItem('Store', Store, 'Store', false),
+    ScreenItem('Loading', Loading, 'Loading', false),
     ScreenItem('StudyTimer', StudyTimer, 'Study Timer', false),
     ScreenItem('TodoList', TodoList, 'Todo List', false),
   ];
