@@ -62,10 +62,10 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
             loop={true}
           /> */}
           <Image
-            source={require('../../assets/images/cat_image.png')}
+            source={require('../../assets/images/cat_new.png')}
             style={{
               marginTop: '30%',
-              width: 200,
+              width: 250,
               justifyContent: 'center',
               resizeMode: 'contain',
             }}

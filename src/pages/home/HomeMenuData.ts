@@ -47,7 +47,7 @@ const HOME_MENU_DATA = createDataSet([
   {
     text: '',
     iconType: 'FontAwesome6',
-    iconName: 'box-open',
+    iconName: 'box-archive',
     path: '',
     iconColor: palette.brown[600],
   },
