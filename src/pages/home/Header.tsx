@@ -1,16 +1,11 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {
-  setWidth,
-  setHeight,
-  fontSize,
-  fontStyle,
-} from '../../common/deviceUtils';
+import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {setWidth, setHeight, fontSize, fontStyle} from '../../common/deviceUtils';
 import {palette} from '../../common/palette';
 import {View} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export const Header = ({
   cachePress,
@@ -30,7 +25,7 @@ export const Header = ({
       <View style={[styles.container]}>
         <View
           style={{
-            flex: 1.1,
+            flex: 1,
             flexDirection: 'row',
             width: '100%',
             height: '100%',
@@ -45,7 +40,8 @@ export const Header = ({
           <Text
             style={{
               marginLeft: setWidth(5),
-              color: palette.gray[600],
+              // color: palette.gray[600],
+              color: palette.black,
               fontFamily: fontStyle.SemiBold,
               fontSize: fontSize(40),
             }}>
@@ -61,7 +57,15 @@ export const Header = ({
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <View
+            {/* <Image
+              source={require('../../assets/images/doit.png')}
+              style={{
+                width: setWidth(120),
+                justifyContent: 'center',
+                resizeMode: 'contain',
+              }}
+            /> */}
+          {/* <View
             style={{
               flex: 1,
               width: '100%',
@@ -100,11 +104,11 @@ export const Header = ({
                 }}
               />
             </View>
-          </View>
+          </View> */}
         </View>
         <View
           style={{
-            flex: 0.8,
+            flex: 1,
             flexDirection: 'row',
             width: '100%',
             height: '100%',
@@ -112,11 +116,11 @@ export const Header = ({
             justifyContent: 'flex-end',
           }}>
           <TouchableOpacity onPress={cachePress}>
-            <MaterialCommunityIcons
-              name="alarm"
+            <FontAwesome
+              name="pencil"
               style={{marginRight: setWidth(18)}}
-              size={setWidth(23)}
-              color={palette.gray[900]}
+              size={setWidth(21)}
+              color={palette.gray[800]}
             />
           </TouchableOpacity>
         </View>

@@ -22,7 +22,7 @@ type IconType =
 
 interface DataItem {
   id: string;
-  text: string;
+  text?: string;
   iconType: IconType;
   iconName: string;
   path?: string;
@@ -38,25 +38,25 @@ const createDataSet = (items: Omit<DataItem, 'id'>[]): DataItem[] =>
 // HomeMenuData
 const HOME_MENU_DATA = createDataSet([
   {
-    text: '랭킹',
+    text: '',
     iconType: 'FontAwesome5',
     iconName: 'crown',
     path: '',
-    iconColor: palette.amber.A700,
+    iconColor: palette.amber[900],
   },
   {
-    text: '인벤토리',
+    text: '',
     iconType: 'FontAwesome6',
     iconName: 'box-open',
     path: '',
-    iconColor: palette.brown[500],
+    iconColor: palette.brown[600],
   },
   {
-    text: '상점',
+    text: '',
     iconType: 'FontAwesome5',
     iconName: 'store',
     path: '',
-    iconColor: palette.lime[600],
+    iconColor: palette.green[800],
   },
 ]);
 

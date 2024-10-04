@@ -39,7 +39,7 @@ const DynamicIcon: React.FC<{
 };
 
 interface ItemProps {
-  text: string;
+  text?: string;
   iconType: IconType;
   iconName: string;
   path?: string;
@@ -77,9 +77,9 @@ const Item: React.FC<ItemProps> = ({
             iconName={iconName}
             style={styles.iconBox}
             color={iconColor}
-            size={setWidth(30)}
+            size={setWidth(25)}
           />
-          <Text style={styles.text}>{text}</Text>
+            {text && <Text style={styles.text}>{text}</Text>}
         </View>
       </TouchableOpacity>
     </View>
@@ -106,35 +106,21 @@ export const ToDoList: React.FC = () => {
         <View style={styles.container}>
           <View style={styles.header}>
             <View style={{flex: 9, flexDirection: 'row', paddingLeft: '5%'}}>
-              <Text style={{color: 'blue'}}>{'2024/10/10'} </Text>
-              <Text style={{color: 'blue'}}> {'ToDoList'}</Text>
-            </View>
-            <View style={{flex: 2, alignItems: 'flex-end', paddingRight: '5%'}}>
-              <Text style={{color: 'blue'}}>{'+ icon'}</Text>
+              <Text
+                style={[
+                  {
+                    color: palette.gray.A700,
+                    fontFamily: fontStyle.Bold,
+                    fontSize: fontSize(65),
+                  },
+                ]}>
+                {'To Do List'}
+              </Text>
             </View>
           </View>
           <View style={styles.body}>
             <ScrollArea>
-              <View style={styles.body}>
-                <View style={styles.box}>
-                  <Text>1</Text>
-                </View>
-                <View style={styles.box}>
-                  <Text>2</Text>
-                </View>
-                <View style={styles.box}>
-                  <Text>3</Text>
-                </View>
-                <View style={styles.box}>
-                  <Text>4</Text>
-                </View>
-                <View style={styles.box}>
-                  <Text>5</Text>
-                </View>
-                <View style={styles.box}>
-                  <Text>6</Text>
-                </View>
-              </View>
+              <View style={styles.body}></View>
             </ScrollArea>
           </View>
         </View>
@@ -145,20 +131,40 @@ export const ToDoList: React.FC = () => {
 
 //#endregion ToDoList
 
+//#region Timer Button
+
+export const TimerButton: React.FC<{
+  text: string;
+  onPress?: () => void;
+  buttonColor?: any;
+}> = ({text, onPress, buttonColor}) => {
+  return (
+    <TouchableOpacity
+      style={[styles.timerButton, {backgroundColor: buttonColor}]}
+      onPress={onPress}>
+      <Text style={[styles.buttonText]}>{text}</Text>
+    </TouchableOpacity>
+  );
+};
+
+//#endregion Timer Button
+
 const styles = StyleSheet.create({
   //#region renderItem
   item: {
-    width: setWidth(100),
+    width: setWidth(55),
+    height: setWidth(70),
     alignItems: 'center',
+    justifyContent: 'center',
   },
   text: {
     fontFamily: fontStyle.Bold,
-    fontSize: fontSize(33),
+    fontSize: fontSize(30),
     color: palette.black,
   },
   iconBox: {
     textAlign: 'center',
-    width: setWidth(50),
+    textAlignVertical: 'center',
   },
   //#endregion renderItem
 
@@ -195,4 +201,20 @@ const styles = StyleSheet.create({
   },
 
   //#endregion ToDoList
+
+  //#region Timer Button
+  timerButton: {
+    width: setWidth(35),
+    height: setWidth(35),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: setWidth(25),
+    backgroundColor: palette.skyBlue,
+  },
+  buttonText: {
+    color: palette.white,
+    fontSize: fontSize(30),
+    fontFamily: fontStyle.Bold,
+  },
+  //#endregion Timer Button
 });
