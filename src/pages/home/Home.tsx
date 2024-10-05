@@ -1,12 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Image,
-  ImageBackground,
-  View,
-  Text,
-  FlatList,
-  Alert,
-} from 'react-native';
+import {Image, ImageBackground, View, Text, FlatList, Alert} from 'react-native';
 import {ScreenProps} from '../../../App';
 import {Header} from './HomeHeader';
 import {palette} from '../../common/palette';
