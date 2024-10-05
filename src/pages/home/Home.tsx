@@ -68,7 +68,12 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
         source={require('../../assets/images/background_new.png')}
         style={{flex: 10}}>
         <View style={{flex: 0.7, alignItems: 'center'}}>
-          <Header coin={300} infoPress={() => {}} toDoPress={() => {}} />
+          <Header
+            coin={300}
+            toDoPress={() => {
+              navigation.navigate('TodoList');
+            }}
+          />
         </View>
         <View
           style={{
@@ -184,6 +189,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
               renderItem={renderItem}
               keyExtractor={item => item.id}
               scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
               numColumns={3}
             />
           </View>

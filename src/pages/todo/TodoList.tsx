@@ -6,16 +6,16 @@ import {palette} from '../../common/palette';
 import {useModal} from '../../common/hooks';
 import InfoModal from '../../components/common/InfoModal';
 
-const Store: React.FC<ScreenProps> = ({navigation}) => {
+const TodoList: React.FC<ScreenProps> = ({navigation}) => {
   const {isVisible, openModal, closeModal} = useModal();
   return (
     <View style={{flex: 10}}>
       <View style={{flex: 1}}>
         <Header
           centerIconProps={{
-            iconType: 'FontAwesome5',
-            iconName: 'store',
-            color: palette.green[800],
+            iconType: 'FontAwesome',
+            iconName: 'pencil',
+            color: palette.indigo[700],
             size: 30,
           }}
           rightIconProps={{
@@ -27,14 +27,14 @@ const Store: React.FC<ScreenProps> = ({navigation}) => {
           }}
         />
         <InfoModal isVisible={isVisible} onClose={closeModal}>
-          <Text>{'상점 정보'}</Text>
+          <Text>{'TodoList 정보'}</Text>
         </InfoModal>
       </View>
       <View style={{flex: 9}}>
-        <Text>{'상점'}</Text>
+        <Text>{'TodoList'}</Text>
       </View>
     </View>
   );
 };
 
-export default Store;
+export default TodoList;

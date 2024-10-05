@@ -6,7 +6,7 @@ import {palette} from '../../common/palette';
 import {useModal} from '../../common/hooks';
 import InfoModal from '../../components/common/InfoModal';
 
-const Store: React.FC<ScreenProps> = ({navigation}) => {
+const Rank: React.FC<ScreenProps> = ({navigation}) => {
   const {isVisible, openModal, closeModal} = useModal();
   return (
     <View style={{flex: 10}}>
@@ -14,8 +14,8 @@ const Store: React.FC<ScreenProps> = ({navigation}) => {
         <Header
           centerIconProps={{
             iconType: 'FontAwesome5',
-            iconName: 'store',
-            color: palette.green[800],
+            iconName: 'crown',
+            color: palette.amber[900],
             size: 30,
           }}
           rightIconProps={{
@@ -27,14 +27,14 @@ const Store: React.FC<ScreenProps> = ({navigation}) => {
           }}
         />
         <InfoModal isVisible={isVisible} onClose={closeModal}>
-          <Text>{'상점 정보'}</Text>
+          <Text>{'랭크 정보'}</Text>
         </InfoModal>
       </View>
       <View style={{flex: 9}}>
-        <Text>{'상점'}</Text>
+        <Text>{'랭크'}</Text>
       </View>
     </View>
   );
 };
 
-export default Store;
+export default Rank;

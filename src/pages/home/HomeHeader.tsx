@@ -5,16 +5,17 @@ import {palette} from '../../common/palette';
 import {View} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {TimerButton} from './HomeCompo';
+import {InfoModal} from '../../components/common/InfoModal';
+import {useModal} from '../../common/hooks';
 
 export const Header = ({
   toDoPress,
-  infoPress,  
   coin,
 }: {
   toDoPress?: () => void;
-  infoPress?: () => void;
   coin: number;
 }) => {
+  const {isVisible, openModal, closeModal} = useModal();
   return (
     <>
       <View style={[styles.container]}>
@@ -51,56 +52,7 @@ export const Header = ({
             height: '100%',
             alignItems: 'center',
             justifyContent: 'center',
-          }}>
-          {/* <Image
-              source={require('../../assets/images/doit.png')}
-              style={{
-                width: setWidth(120),
-                justifyContent: 'center',
-                resizeMode: 'contain',
-              }}
-            /> */}
-          {/* <View
-            style={{
-              flex: 1,
-              width: '100%',
-              justifyContent: 'flex-end',
-            }}>
-            <Text
-              style={{
-                color: palette.gray[600],
-                marginRight: setWidth(5),
-                fontFamily: fontStyle.SemiBold,
-                fontSize: fontSize(38),
-                lineHeight: setHeight(50),
-              }}>
-              {'Lv.'}
-              {level}
-            </Text>
-          </View>
-          <View
-            style={{
-              flex: 1,
-              width: '100%',
-              justifyContent: 'center',
-            }}>
-            <View
-              style={{
-                height: setHeight(10),
-                backgroundColor: palette.gray[300],
-                borderRadius: setHeight(10),
-              }}>
-              <View
-                style={{
-                  width: `${percentage}%`,
-                  height: setHeight(10),
-                  backgroundColor: palette.cyan[400],
-                  borderRadius: setHeight(10),
-                }}
-              />
-            </View>
-          </View> */}
-        </View>
+          }}></View>
         <View
           style={{
             flex: 1,
@@ -116,15 +68,20 @@ export const Header = ({
             iconStyle={{marginRight: setWidth(18)}}
             iconColor={palette.gray[800]}
             iconSize={setWidth(21)}
-            onPress={() => {toDoPress}}
+            onPress={() => {
+              openModal();
+            }}
           />
+          <InfoModal isVisible={isVisible} onClose={closeModal}>
+            <Text>{'Home Info'}</Text>
+          </InfoModal>
           <TimerButton
             iconType="FontAwesome"
             iconName="pencil"
             iconStyle={{marginRight: setWidth(18)}}
             iconColor={palette.gray[800]}
             iconSize={setWidth(21)}
-            onPress={() => {infoPress}}
+            onPress={toDoPress}
           />
         </View>
       </View>

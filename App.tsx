@@ -4,10 +4,10 @@ import {createStackNavigator, StackNavigationProp} from '@react-navigation/stack
 
 import Home from './src/pages/home/Home';
 import Loading from './src/pages/Loading/Loading';
-import StudyTimer from './src/pages/study/time/StudyTimer';
-import TodoList from './src/pages/study/todo/TodoList';
 import Store from './src/pages/store/Store';
 import Inventory from './src/pages/store/Inventroy';
+import TodoList from './src/pages/todo/TodoList';
+import Rank from './src/pages/rank/Rank';
 
 export type ScreenProps = {
   route: any;
@@ -35,15 +35,15 @@ function App(): React.JSX.Element {
   const ScreenList: any[] = [
     ScreenItem('Loading', Loading, 'Loading', false),
     ScreenItem('Home', Home, 'Home', false),
-    ScreenItem('StudyTimer', StudyTimer, 'Study Timer', false),
-    ScreenItem('TodoList', TodoList, 'Todo List', false),
     ScreenItem('Store', Store, 'Store', false),
     ScreenItem('Inventory', Inventory, 'Inventory', false),
+    ScreenItem('TodoList', TodoList, 'TodoList', false),
+    ScreenItem('Rank', Rank, 'Rank', false),
   ];
   return (
     <>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="Rank">
           {ScreenList.map((component: any, index: number) => {
             return (
               <React.Fragment key={`screenitem-${index}`}>

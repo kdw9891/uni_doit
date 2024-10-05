@@ -41,19 +41,23 @@ export const Item: React.FC<{
   iconName: string;
   path?: string;
   iconColor?: string;
-}> = ({text, iconType, iconName, path, iconColor}) => {
+  onPress?: () => void; // onPress 속성 추가
+}> = ({text, iconType, iconName, path, iconColor, onPress}) => {
   const navigation = useNavigation();
 
   const handlePress = () => {
-    if (path) {
+    if (onPress) {
+      // onPress가 있으면 실행
+      onPress();
+    } else if (path) {
+      // path가 있으면 navigation 실행
       try {
         navigation.navigate(path as never);
-        console.log(navigation.getState());
       } catch (error) {
         console.error(`Navigation failed to ${path}: ${error}`);
       }
     } else {
-      console.warn(`No path defined for item: ${text}`);
+      console.warn(`No path or onPress defined for item: ${text}`);
     }
   };
 
