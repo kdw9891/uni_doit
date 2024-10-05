@@ -1,20 +1,45 @@
-import React from 'react';
-import {Image, ImageBackground, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Image, ImageBackground, View, Text, FlatList} from 'react-native';
 import {ScreenProps} from '../../../App';
 import {Header} from './Header';
-import {Text, FlatList} from 'react-native';
 import {palette} from '../../common/palette';
-import LottieView from 'lottie-react-native';
 import {renderItem} from './HomeCompo';
 import HomeMenuData from './HomeMenuData';
 import {TimerButton} from './HomeCompo';
-import {globalContext} from '../../common/globalContext';
 import {fontSize, fontStyle, setHeight} from '../../common/deviceUtils';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
+import LottieView from 'lottie-react-native';
 
 const Home: React.FC<ScreenProps> = ({navigation}) => {
   const percentage = 50;
+
+  const [timer, setTimer] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    if (isRunning) {
+      interval = setInterval(() => {
+        setTimer(prev => prev + 1);
+      }, 1000);
+    } else if (!isRunning && timer !== 0) {
+      clearInterval(interval!);
+    }
+    return () => clearInterval(interval!);
+  }, [isRunning]);
+
+  const formatTime = (time: number) => {
+    const getSeconds = `0${time % 60}`.slice(-2);
+    const minutes = Math.floor(time / 60);
+    const getMinutes = `0${minutes % 60}`.slice(-2);
+    const getHours = `0${Math.floor(time / 3600)}`.slice(-2);
+
+    return `${getHours}:${getMinutes}:${getSeconds}`;
+  };
+
+  const resetTimer = () => {
+    setTimer(0);
+    setIsRunning(false);
+  };
 
   return (
     <>
@@ -37,20 +62,29 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
               height: '80%',
               justifyContent: 'space-around',
               alignItems: 'center',
-              // borderTopWidth: 1,
-              // borderBottomWidth: 1,
-              // borderColor: palette.gray[400],
             }}>
-            <Entypo name="cw" size={24} color={palette.gray[600]} />
+            <TimerButton
+              iconType="Entypo"
+              iconName="ccw"
+              iconColor={palette.gray[600]}
+              iconSize={24}
+              onPress={resetTimer}
+            />
             <Text
               style={{
                 fontSize: 24,
                 fontWeight: 'bold',
                 color: palette.gray[800],
               }}>
-              00:00
+              {formatTime(timer)}
             </Text>
-            <AntDesign name="caretright" size={24} color={palette.gray[600]} />
+            <TimerButton
+              iconType="Entypo"
+              iconName={isRunning ? 'controller-stop' : 'controller-play'}
+              iconColor={palette.gray[600]}
+              iconSize={24}
+              onPress={() => setIsRunning(!isRunning)}
+            />
           </View>
         </View>
         <View

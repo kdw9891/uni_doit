@@ -79,7 +79,7 @@ const Item: React.FC<ItemProps> = ({
             color={iconColor}
             size={setWidth(25)}
           />
-            {text && <Text style={styles.text}>{text}</Text>}
+          {text && <Text style={styles.text}>{text}</Text>}
         </View>
       </TouchableOpacity>
     </View>
@@ -134,15 +134,20 @@ export const ToDoList: React.FC = () => {
 //#region Timer Button
 
 export const TimerButton: React.FC<{
-  text: string;
   onPress?: () => void;
-  buttonColor?: any;
-}> = ({text, onPress, buttonColor}) => {
+  iconType: IconType;
+  iconName: string;
+  iconColor?: string;
+  iconSize?: number;
+}> = ({onPress, iconType, iconName, iconColor, iconSize}) => {
   return (
-    <TouchableOpacity
-      style={[styles.timerButton, {backgroundColor: buttonColor}]}
-      onPress={onPress}>
-      <Text style={[styles.buttonText]}>{text}</Text>
+    <TouchableOpacity onPress={onPress}>
+      <DynamicIcon
+        iconType={iconType}
+        iconName={iconName}
+        color={iconColor}
+        size={iconSize}
+      />
     </TouchableOpacity>
   );
 };
@@ -208,13 +213,6 @@ const styles = StyleSheet.create({
     height: setWidth(35),
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: setWidth(25),
-    backgroundColor: palette.skyBlue,
-  },
-  buttonText: {
-    color: palette.white,
-    fontSize: fontSize(30),
-    fontFamily: fontStyle.Bold,
   },
   //#endregion Timer Button
 });
