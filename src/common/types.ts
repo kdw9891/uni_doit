@@ -36,3 +36,33 @@ export enum PermMethod {
   etc5,
   void,
 };
+
+export type IconType =
+  | 'AntDesign'
+  | 'Entypo'
+  | 'EvilIcons'
+  | 'Feather'
+  | 'FontAwesome'
+  | 'FontAwesome5'
+  | 'FontAwesome5Brands'
+  | 'FontAwesome6'
+  | 'FontAwesome6Brands'
+  | 'Fontisto'
+  | 'Foundation'
+  | 'Ionicons'
+  | 'MaterialCommunityIcons'
+  | 'MaterialIcons'
+  | 'Octicons'
+  | 'SimpleLineIcons'
+  | 'Zocial'
+  | undefined;
+
+export interface DataItem {
+  id: string;
+  text: string;
+  iconType: IconType;
+  iconName: string;
+  path?: string;
+  iconColor?: string;
+  permissions?: string[];
+}

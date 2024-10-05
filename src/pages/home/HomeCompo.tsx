@@ -2,100 +2,13 @@ import React from 'react';
 import {View, Text} from 'react-native';
 import {palette} from '../../common/palette';
 import {StyleSheet} from 'react-native';
-import {
-  setHeight,
-  setWidth,
-  fontSize,
-  fontStyle,
-} from '../../common/deviceUtils';
-import {IconComponents, IconType} from './IconType';
+import {setHeight, setWidth, fontSize, fontStyle} from '../../common/deviceUtils';
+import {IconComponents, IconType} from '../../common/IconType';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import ScrollArea from '../../components/layout/ScrollArea';
 import {Background} from '../../components/layout/Background';
-
-//#region DynamicIcon
-const DynamicIcon: React.FC<{
-  iconType: IconType;
-  iconName: string;
-  style?: any;
-  size?: number;
-  color?: string;
-}> = ({
-  iconType,
-  iconName,
-  style,
-  size = setWidth(95),
-  color = palette.black,
-}) => {
-  const IconComponent = IconComponents[iconType];
-  if (!IconComponent) {
-    console.warn(`Icon type "${iconType}" not found`);
-    return null;
-  }
-  return (
-    <IconComponent name={iconName} size={size} color={color} style={style} />
-  );
-};
-
-interface ItemProps {
-  text?: string;
-  iconType: IconType;
-  iconName: string;
-  path?: string;
-  iconColor?: string;
-}
-
-const Item: React.FC<ItemProps> = ({
-  text,
-  iconType,
-  iconName,
-  path,
-  iconColor,
-}) => {
-  const navigation = useNavigation();
-
-  const handlePress = () => {
-    if (path) {
-      try {
-        navigation.navigate(path as never);
-        console.log(navigation.getState());
-      } catch (error) {
-        console.error(`Navigation failed to ${path}: ${error}`);
-      }
-    } else {
-      console.warn(`No path defined for item: ${text}`);
-    }
-  };
-
-  return (
-    <View>
-      <TouchableOpacity onPress={handlePress}>
-        <View style={styles.item}>
-          <DynamicIcon
-            iconType={iconType}
-            iconName={iconName}
-            style={styles.iconBox}
-            color={iconColor}
-            size={setWidth(25)}
-          />
-          {text && <Text style={styles.text}>{text}</Text>}
-        </View>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-export const renderItem = ({item}: {item: any}) => (
-  <Item
-    text={item.text}
-    iconType={item.iconType}
-    iconName={item.iconName}
-    path={item.path}
-    iconColor={item.iconColor}
-  />
-);
-//#endregion DynamicIcon
+import {DynamicIcon} from '../../components/common/DynamicIcon';
 
 //#region ToDoList
 
@@ -139,12 +52,14 @@ export const TimerButton: React.FC<{
   iconName: string;
   iconColor?: string;
   iconSize?: number;
-}> = ({onPress, iconType, iconName, iconColor, iconSize}) => {
+  iconStyle?: any;
+}> = ({onPress, iconType, iconName, iconColor, iconSize, iconStyle}) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <DynamicIcon
         iconType={iconType}
         iconName={iconName}
+        style={iconStyle}
         color={iconColor}
         size={iconSize}
       />

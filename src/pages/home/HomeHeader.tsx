@@ -1,24 +1,19 @@
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {setWidth, setHeight, fontSize, fontStyle} from '../../common/deviceUtils';
+import {StyleSheet, Text} from 'react-native';
+import {setWidth, fontSize, fontStyle} from '../../common/deviceUtils';
 import {palette} from '../../common/palette';
 import {View} from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {TimerButton} from './HomeCompo';
 
 export const Header = ({
-  cachePress,
-  timePress,
+  toDoPress,
+  infoPress,  
   coin,
-  level,
-  percentage,
 }: {
-  cachePress?: () => void;
-  timePress?: () => void;
+  toDoPress?: () => void;
+  infoPress?: () => void;
   coin: number;
-  level: number;
-  percentage: number;
 }) => {
   return (
     <>
@@ -57,7 +52,7 @@ export const Header = ({
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-            {/* <Image
+          {/* <Image
               source={require('../../assets/images/doit.png')}
               style={{
                 width: setWidth(120),
@@ -115,14 +110,22 @@ export const Header = ({
             alignItems: 'center',
             justifyContent: 'flex-end',
           }}>
-          <TouchableOpacity onPress={cachePress}>
-            <FontAwesome
-              name="pencil"
-              style={{marginRight: setWidth(18)}}
-              size={setWidth(21)}
-              color={palette.gray[800]}
-            />
-          </TouchableOpacity>
+          <TimerButton
+            iconType="FontAwesome"
+            iconName="info"
+            iconStyle={{marginRight: setWidth(18)}}
+            iconColor={palette.gray[800]}
+            iconSize={setWidth(21)}
+            onPress={() => {toDoPress}}
+          />
+          <TimerButton
+            iconType="FontAwesome"
+            iconName="pencil"
+            iconStyle={{marginRight: setWidth(18)}}
+            iconColor={palette.gray[800]}
+            iconSize={setWidth(21)}
+            onPress={() => {infoPress}}
+          />
         </View>
       </View>
     </>

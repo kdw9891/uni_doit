@@ -1,9 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import {Image, ImageBackground, View, Text, FlatList} from 'react-native';
+import {
+  Image,
+  ImageBackground,
+  View,
+  Text,
+  FlatList,
+  Alert,
+} from 'react-native';
 import {ScreenProps} from '../../../App';
-import {Header} from './Header';
+import {Header} from './HomeHeader';
 import {palette} from '../../common/palette';
-import {renderItem} from './HomeCompo';
+import {renderItem} from '../../components/common/DynamicIcon';
 import HomeMenuData from './HomeMenuData';
 import {TimerButton} from './HomeCompo';
 import {fontSize, fontStyle, setHeight} from '../../common/deviceUtils';
@@ -37,8 +44,29 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
   };
 
   const resetTimer = () => {
-    setTimer(0);
-    setIsRunning(false);
+    if (isRunning || timer > 0) {
+      Alert.alert(
+        '공부를 멈출꺼냥?',
+        '현재 타이머가 멈췄다. 시간 초기화할꺼냥?',
+        [
+          {
+            text: '아니요',
+            onPress: () => {},
+            style: 'cancel',
+          },
+          {
+            text: '네',
+            onPress: () => {
+              setTimer(0);
+              setIsRunning(false);
+            },
+          },
+        ],
+      );
+    } else {
+      setTimer(0);
+      setIsRunning(false);
+    }
   };
 
   return (
@@ -47,7 +75,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
         source={require('../../assets/images/background_new.png')}
         style={{flex: 10}}>
         <View style={{flex: 0.7, alignItems: 'center'}}>
-          <Header coin={300} level={10000} percentage={80} />
+          <Header coin={300} infoPress={() => {}} toDoPress={() => {}} />
         </View>
         <View
           style={{
@@ -58,22 +86,21 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
           <View
             style={{
               flexDirection: 'row',
-              width: '60%',
-              height: '80%',
-              justifyContent: 'space-around',
+              width: '100%',
+              justifyContent: 'space-evenly',
               alignItems: 'center',
             }}>
             <TimerButton
-              iconType="Entypo"
-              iconName="ccw"
-              iconColor={palette.gray[600]}
-              iconSize={24}
+              iconType="Foundation"
+              iconName="refresh"
+              iconColor={palette.blue[600]}
+              iconSize={setHeight(24)}
               onPress={resetTimer}
             />
             <Text
               style={{
-                fontSize: 24,
-                fontWeight: 'bold',
+                fontSize: fontSize(65),
+                fontFamily: fontStyle.Bold,
                 color: palette.gray[800],
               }}>
               {formatTime(timer)}
@@ -81,8 +108,8 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
             <TimerButton
               iconType="Entypo"
               iconName={isRunning ? 'controller-stop' : 'controller-play'}
-              iconColor={palette.gray[600]}
-              iconSize={24}
+              iconColor={isRunning ? palette.red[500] : palette.green[600]}
+              iconSize={setHeight(24)}
               onPress={() => setIsRunning(!isRunning)}
             />
           </View>
@@ -168,16 +195,6 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
             />
           </View>
         </View>
-        {/* <View
-          style={{
-            flex: 3,
-            width: '100%',
-            height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <ToDoList />
-        </View> */}
       </ImageBackground>
     </>
   );
