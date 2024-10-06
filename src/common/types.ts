@@ -64,5 +64,4 @@ export interface DataItem {
   iconName: string;
   path?: string;
   iconColor?: string;
-  permissions?: string[];
 }

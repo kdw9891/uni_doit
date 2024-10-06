@@ -5,7 +5,7 @@ import {createStackNavigator, StackNavigationProp} from '@react-navigation/stack
 import Home from './src/pages/home/Home';
 import Loading from './src/pages/Loading/Loading';
 import Store from './src/pages/store/Store';
-import Inventory from './src/pages/store/Inventroy';
+import Inventory from './src/pages/store/Inventory';
 import TodoList from './src/pages/todo/TodoList';
 import Rank from './src/pages/rank/Rank';
 
@@ -43,7 +43,7 @@ function App(): React.JSX.Element {
   return (
     <>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Rank">
+        <Stack.Navigator initialRouteName="Store">
           {ScreenList.map((component: any, index: number) => {
             return (
               <React.Fragment key={`screenitem-${index}`}>

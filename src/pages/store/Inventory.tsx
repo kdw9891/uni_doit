@@ -6,7 +6,7 @@ import {palette} from '../../common/palette';
 import {useModal} from '../../common/hooks';
 import InfoModal from '../../components/common/InfoModal';
 import {FlatList} from 'react-native-gesture-handler';
-import StoreData from './StoreData';
+import InventoryData from './InventoryData';
 import {storeItem} from '../../components/common/DynamicIcon';
 import {Background} from '../../components/layout/Background';
 import {fontSize, fontStyle} from '../../common/deviceUtils';
@@ -44,7 +44,7 @@ const Section: React.FC<{title: string; data: any[]}> = ({title, data}) => (
   </View>
 );
 
-const Store: React.FC<ScreenProps> = ({navigation}) => {
+const Inventory: React.FC<ScreenProps> = ({navigation}) => {
   const {isVisible, openModal, closeModal} = useModal();
   return (
     <Background>
@@ -52,9 +52,9 @@ const Store: React.FC<ScreenProps> = ({navigation}) => {
         <View style={{flex: 1}}>
           <Header
             centerIconProps={{
-              iconType: 'FontAwesome5',
-              iconName: 'store',
-              color: palette.green[800],
+              iconType: 'FontAwesome6',
+              iconName: 'box-archive',
+              color: palette.brown[600],
               size: 30,
             }}
             rightIconProps={{
@@ -71,11 +71,7 @@ const Store: React.FC<ScreenProps> = ({navigation}) => {
         </View>
         <View style={{flex: 9}}>
           <ScrollArea>
-            <Section title="소모품" data={StoreData.CONSUMABLE_DATA} />
-            <Section title="특수 아이템" data={StoreData.SPECIAL_ITEMS_DATA} />
-            <Section title="커스터마이징" data={StoreData.CUSTOMIZING_DATA} />
-            <Section title="악세서리" data={StoreData.ACCESSORY_DATA} />
-            <Section title="친구" data={StoreData.COMPANION_ITEMS_DATA} />
+            <Section title="" data={InventoryData.INVENTORY_DATA} />
           </ScrollArea>
         </View>
       </View>
@@ -83,4 +79,4 @@ const Store: React.FC<ScreenProps> = ({navigation}) => {
   );
 };
 
-export default Store;
+export default Inventory;

@@ -1,33 +1,5 @@
 import {palette} from '../../common/palette';
-
-type IconType =
-  | 'AntDesign'
-  | 'Entypo'
-  | 'EvilIcons'
-  | 'Feather'
-  | 'FontAwesome'
-  | 'FontAwesome5'
-  | 'FontAwesome5Brands'
-  | 'FontAwesome6'
-  | 'FontAwesome6Brands'
-  | 'Fontisto'
-  | 'Foundation'
-  | 'Ionicons'
-  | 'MaterialCommunityIcons'
-  | 'MaterialIcons'
-  | 'Octicons'
-  | 'SimpleLineIcons'
-  | 'Zocial'
-  | 'undefinded';
-
-interface DataItem {
-  id: string;
-  text?: string;
-  iconType: IconType;
-  iconName: string;
-  path?: string;
-  iconColor?: string;
-}
+import {IconType, DataItem} from '../../common/types';
 
 const createDataSet = (items: Omit<DataItem, 'id'>[]): DataItem[] =>
   items.map((item, index) => ({

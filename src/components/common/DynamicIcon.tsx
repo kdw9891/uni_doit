@@ -14,13 +14,7 @@ export const DynamicIcon: React.FC<{
   style?: any;
   size?: number;
   color?: string;
-}> = ({
-  iconType,
-  iconName,
-  style,
-  size = setWidth(95),
-  color = palette.black,
-}) => {
+}> = ({iconType, iconName, style, size = setWidth(95), color = palette.black}) => {
   const IconComponent = IconComponents[iconType];
   if (!IconComponent) {
     console.warn(`Icon type "${iconType}" not found`);
@@ -33,16 +27,17 @@ export const DynamicIcon: React.FC<{
 
 //#endregion DynamicIcon
 
-//#region Item
-
 export const Item: React.FC<{
+  viewStyle?: any;
   text?: string;
   iconType: IconType;
   iconName: string;
+  iconStyle?: any;
   path?: string;
   iconColor?: string;
-  onPress?: () => void; // onPress 속성 추가
-}> = ({text, iconType, iconName, path, iconColor, onPress}) => {
+  iconSize?: number;
+  onPress?: () => void;
+}> = ({viewStyle = styles.item, text, iconType, iconName, iconStyle = styles.iconBox, path, iconColor, iconSize = setWidth(25), onPress}) => {
   const navigation = useNavigation();
 
   const handlePress = () => {
@@ -64,13 +59,13 @@ export const Item: React.FC<{
   return (
     <View>
       <TouchableOpacity onPress={handlePress}>
-        <View style={styles.item}>
+        <View style={viewStyle}>
           <DynamicIcon
             iconType={iconType}
             iconName={iconName}
-            style={styles.iconBox}
+            style={iconStyle}
             color={iconColor}
-            size={setWidth(25)}
+            size={iconSize}
           />
           {text && <Text style={styles.text}>{text}</Text>}
         </View>
@@ -79,11 +74,14 @@ export const Item: React.FC<{
   );
 };
 
-//#endregion Item
+//# region Store & Inventory Item
+
+// #endregion Store & Inventory Item
 
 //#region renderItem
 export const renderItem = ({item}: {item: any}) => (
   <Item
+    viewStyle={styles.item}
     text={item.text}
     iconType={item.iconType}
     iconName={item.iconName}
@@ -92,6 +90,21 @@ export const renderItem = ({item}: {item: any}) => (
   />
 );
 //#endregion renderItem
+
+//#region storeItem
+export const storeItem = ({item}: {item: any}) => (
+  <Item
+    viewStyle={styles.menuItem}
+    text={item.text}
+    iconType={item.iconType}
+    iconName={item.iconName}
+    path={item.path}
+    iconSize={setWidth(35)}
+    iconStyle={item.iconStyle}
+    iconColor={item.iconColor}
+  />
+);
+//#endregion storeItem
 
 const styles = StyleSheet.create({
   //#region renderItem
@@ -102,6 +115,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
+    textAlign: 'center',
     fontFamily: fontStyle.Bold,
     fontSize: fontSize(30),
     color: palette.black,
@@ -111,4 +125,15 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   //#endregion renderItem
+
+  //#region storeItem
+  menuItem: {
+    marginHorizontal: 20,
+    marginVertical: 20,
+    width: setWidth(65),
+    height: setWidth(70),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  //#endregion storeItem
 });
