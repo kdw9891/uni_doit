@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, StackNavigationProp} from '@react-navigation/stack';
 
 import Home from './src/pages/home/Home';
+import Home2 from './src/pages/home/Home2';
 import Loading from './src/pages/Loading/Loading';
 import Store from './src/pages/store/Store';
 import Inventory from './src/pages/store/Inventory';
@@ -35,6 +36,7 @@ function App(): React.JSX.Element {
   const ScreenList: any[] = [
     ScreenItem('Loading', Loading, 'Loading', false),
     ScreenItem('Home', Home, 'Home', false),
+    ScreenItem('Home2', Home2, 'Home2', false),
     ScreenItem('Store', Store, 'Store', false),
     ScreenItem('Inventory', Inventory, 'Inventory', false),
     ScreenItem('TodoList', TodoList, 'TodoList', false),
@@ -43,7 +45,7 @@ function App(): React.JSX.Element {
   return (
     <>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Store">
+        <Stack.Navigator initialRouteName="Home">
           {ScreenList.map((component: any, index: number) => {
             return (
               <React.Fragment key={`screenitem-${index}`}>

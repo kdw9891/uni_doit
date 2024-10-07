@@ -9,7 +9,7 @@ import {TimerButton} from './HomeCompo';
 import {fontSize, fontStyle, setHeight} from '../../common/deviceUtils';
 import LottieView from 'lottie-react-native';
 
-const Home: React.FC<ScreenProps> = ({navigation}) => {
+const Home2: React.FC<ScreenProps> = ({navigation}) => {
   const percentage = 50;
 
   const [timer, setTimer] = useState(0);
@@ -65,16 +65,13 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
   return (
     <>
       <ImageBackground
-        source={require('../../assets/images/background_new.png')}
+        source={require('../../assets/images/bg_white.png')}
         style={{flex: 10}}>
         <View style={{flex: 0.7, alignItems: 'center'}}>
           <Header
             coin={300}
             toDoPress={() => {
               navigation.navigate('TodoList');
-            }}
-            onPress={() => {
-              navigation.navigate('Home2');
             }}
           />
         </View>
@@ -87,7 +84,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
           <View
             style={{
               flexDirection: 'row',
-              width: '80%',
+              width: '60%',
               justifyContent: 'space-evenly',
               alignItems: 'center',
             }}>
@@ -124,10 +121,10 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
             loop={true}
           /> */}
           <Image
-            source={require('../../assets/images/cat_new.png')}
+            source={require('../../assets/images/cat_image.png')}
             style={{
               marginTop: '30%',
-              width: 250,
+              width: 280,
               justifyContent: 'center',
               resizeMode: 'contain',
             }}
@@ -202,4 +199,4 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
   );
 };
 
-export default Home;
+export default Home2;

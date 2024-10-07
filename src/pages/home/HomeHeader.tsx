@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text} from 'react-native';
+import {Image, StyleSheet, Text} from 'react-native';
 import {setWidth, fontSize, fontStyle} from '../../common/deviceUtils';
 import {palette} from '../../common/palette';
 import {View} from 'react-native';
@@ -7,12 +7,15 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {TimerButton} from './HomeCompo';
 import {InfoModal} from '../../components/common/InfoModal';
 import {useModal} from '../../common/hooks';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export const Header = ({
   toDoPress,
+  onPress,
   coin,
 }: {
   toDoPress?: () => void;
+  onPress: () => void;
   coin: number;
 }) => {
   const {isVisible, openModal, closeModal} = useModal();
@@ -46,13 +49,24 @@ export const Header = ({
         </View>
         <View
           style={{
-            flex: 2,
+            flex: 1,
             flexDirection: 'column',
             width: '100%',
             height: '100%',
             alignItems: 'center',
             justifyContent: 'center',
-          }}></View>
+          }}>
+          <TouchableOpacity onPress={onPress}>
+            <Image
+              source={require('../../assets/images/doit_logo.png')}
+              style={{
+                width: 130,
+                justifyContent: 'center',
+                resizeMode: 'contain',
+              }}
+            />
+          </TouchableOpacity>
+        </View>
         <View
           style={{
             flex: 1,
