@@ -19,10 +19,8 @@ const api: <T>(method: HttpMethod, url: string, params: {} | [] | FormData) =>
     url = `/doit${!url.startsWith("/") ? "/" + url : url}`;
   
   const headers = {
-    Authorization: `Bearer ${globalContext.autoToken}`,
+    Authorization: `Bearer ${globalContext.authToken}`,
   };
-
-  console.log(url);
   
   switch (method) {
     case "get":
@@ -48,10 +46,10 @@ axios.interceptors.response.use(response => {
 },
 error => {
   if(error.response?.data == "TokenExpired"){
-    if(globalContext.autoToken){ 
-      globalContext.autoToken = null;
+    if(globalContext.authToken){
+      globalContext.authToken = null;
       Alert.alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
-      //TODO:route to home
+      globalContext.navigation.navigate('Login');
       return;
     }
   }
