@@ -146,11 +146,12 @@ const Home2: React.FC<ScreenProps> = ({navigation}) => {
         </View>
         <View
           style={{
-            flex: 0.7,
+            flex: 1,
             width: '100%',
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'row',
+            backgroundColor: palette.gray[200],
           }}>
           <View
             style={{
