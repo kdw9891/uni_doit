@@ -15,7 +15,7 @@ export const Header = ({
   coin,
 }: {
   toDoPress?: () => void;
-  onPress: () => void;
+  onPress?: () => void;
   coin: number;
 }) => {
   const {isVisible, openModal, closeModal} = useModal();

@@ -65,7 +65,7 @@ const Home2: React.FC<ScreenProps> = ({navigation}) => {
   return (
     <>
       <ImageBackground
-        source={require('../../assets/images/bg_white.png')}
+        source={require('../../assets/newimages/white-background.jpg')}
         style={{flex: 10}}>
         <View style={{flex: 0.7, alignItems: 'center'}}>
           <Header
