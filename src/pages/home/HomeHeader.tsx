@@ -30,17 +30,20 @@ export const Header = ({
             height: '100%',
             alignItems: 'center',
           }}>
-          <MaterialIcons
-            name="copyright"
-            style={{marginLeft: setWidth(15)}}
-            size={setWidth(20)}
-            color={palette.deepOrange.A700}
+          <Image
+            source={require('../../assets/newimages/coin.png')}
+            style={{
+              marginLeft: setWidth(15),
+              width: setWidth(60),
+              height: setWidth(60),
+              resizeMode: 'contain',
+              position: 'absolute',
+            }}
           />
           <Text
             style={{
-              marginLeft: setWidth(5),
-              // color: palette.gray[600],
-              color: palette.black,
+              marginLeft: setWidth(40),
+              color: palette.gray[800],
               fontFamily: fontStyle.SemiBold,
               fontSize: fontSize(40),
             }}>
@@ -87,16 +90,16 @@ export const Header = ({
             }}
           />
           <InfoModal isVisible={isVisible} onClose={closeModal}>
-            <Text>{'Home Info'}</Text>
+            <Text>{'Info Modal'}</Text>
           </InfoModal>
-          <TimerButton
+          {/* <TimerButton
             iconType="FontAwesome"
             iconName="pencil"
             iconStyle={{marginRight: setWidth(18)}}
             iconColor={palette.gray[800]}
             iconSize={setWidth(21)}
             onPress={toDoPress}
-          />
+          /> */}
         </View>
       </View>
     </>

@@ -1,17 +1,18 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Image} from 'react-native';
 import {fontSize, fontStyle} from '../../common/deviceUtils';
 import {palette} from '../../common/palette';
 import {View} from 'react-native';
-import {Item, DynamicIcon} from './DynamicIcon';
+import {Item} from './DynamicIcon';
 import {IconType} from '../../common/IconType';
 
 interface IconProps {
   iconType: IconType;
   iconName: string;
-  color: any;
-  size: number;
+  color?: any;
+  size?: number;
   onPress?: () => void;
+  imagePath?: any;
 }
 
 interface HeaderProps {
@@ -49,12 +50,18 @@ export const Header: React.FC<HeaderProps> = ({
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <DynamicIcon
-            iconType={centerIconProps.iconType}
-            iconName={centerIconProps.iconName}
-            color={centerIconProps.color}
-            size={centerIconProps.size}
-          />
+          {centerIconProps.imagePath ? (
+            <Image
+              source={centerIconProps.imagePath}
+              style={{
+                width: centerIconProps.size,
+                height: centerIconProps.size,
+                resizeMode: 'contain',
+              }}
+            />
+          ) : (
+            <></>
+          )}
         </View>
 
         <View

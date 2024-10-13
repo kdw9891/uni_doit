@@ -1,15 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import {Image, ImageBackground, View, Text, FlatList, Alert} from 'react-native';
+import {Image, ImageBackground, View, Text, Alert, TouchableOpacity} from 'react-native';
 import {ScreenProps} from '../../../App';
 import {Header} from './HomeHeader';
 import {palette} from '../../common/palette';
-import {renderItem} from '../../components/common/DynamicIcon';
 import HomeMenuData from './HomeMenuData';
-import {TimerButton} from './HomeCompo';
 import {fontSize, fontStyle, setHeight} from '../../common/deviceUtils';
-import LottieView from 'lottie-react-native';
+import ImageIcon from '../../components/common/ImageIcon';
 
-const Home: React.FC<ScreenProps> = ({navigation}) => {
+const Home2: React.FC<ScreenProps> = ({navigation}) => {
   const percentage = 50;
 
   const [timer, setTimer] = useState(0);
@@ -62,10 +60,17 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
     }
   };
 
+  const handleIconClick = (id: string) => {
+    const item = HomeMenuData.HOME_MENU_DATA.find(item => item.id === id);
+    if (item) {
+      navigation.navigate(item.route);
+    }
+  };
+
   return (
     <>
       <ImageBackground
-        source={require('../../assets/images/background_new.png')}
+        source={require('../../assets/newimages/white-background.jpg')}
         style={{flex: 10}}>
         <View style={{flex: 0.7, alignItems: 'center'}}>
           <Header
@@ -74,7 +79,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
               navigation.navigate('TodoList');
             }}
             onPress={() => {
-              navigation.navigate('Home2');
+              navigation.navigate('OldHome');
             }}
           />
         </View>
@@ -87,17 +92,21 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
           <View
             style={{
               flexDirection: 'row',
-              width: '80%',
+              width: '60%',
               justifyContent: 'space-evenly',
               alignItems: 'center',
             }}>
-            <TimerButton
-              iconType="Foundation"
-              iconName="refresh"
-              iconColor={palette.blue[600]}
-              iconSize={setHeight(24)}
-              onPress={resetTimer}
-            />
+            <TouchableOpacity onPress={resetTimer}>
+              <Image
+                source={require('../../assets/newimages/reseticon.png')}
+                style={{
+                  width: setHeight(24),
+                  height: setHeight(24),
+                  resizeMode: 'contain',
+                }}
+              />
+            </TouchableOpacity>
+
             <Text
               style={{
                 fontSize: fontSize(65),
@@ -106,28 +115,30 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
               }}>
               {formatTime(timer)}
             </Text>
-            <TimerButton
-              iconType="Entypo"
-              iconName={isRunning ? 'controller-stop' : 'controller-play'}
-              iconColor={isRunning ? palette.red[500] : palette.green[600]}
-              iconSize={setHeight(24)}
-              onPress={() => setIsRunning(!isRunning)}
-            />
+
+            <TouchableOpacity onPress={() => setIsRunning(!isRunning)}>
+              <Image
+                source={
+                  isRunning
+                    ? require('../../assets/newimages/stopicon.png')
+                    : require('../../assets/newimages/starticon.png')
+                }
+                style={{
+                  width: setHeight(24),
+                  height: setHeight(24),
+                  resizeMode: 'contain',
+                }}
+              />
+            </TouchableOpacity>
           </View>
         </View>
         <View
           style={{flex: 4.5, justifyContent: 'center', alignItems: 'center'}}>
-          {/* <LottieView
-            style={{width: '100%', height: '100%'}}
-            source={require('../../assets/lottie/cat_moon.json')}
-            autoPlay
-            loop={true}
-          /> */}
           <Image
-            source={require('../../assets/images/cat_new.png')}
+            source={require('../../assets/images/cat_image.png')}
             style={{
               marginTop: '30%',
-              width: 250,
+              width: 280,
               justifyContent: 'center',
               resizeMode: 'contain',
             }}
@@ -167,14 +178,16 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
                 <View
                   style={{
                     justifyContent: 'center',
-                    height: setHeight(11),
+                    height: setHeight(12),
                     borderWidth: 2,
-                    borderColor: palette.gray[200],
+                    borderRadius: 10,
+                    borderColor: palette.gray[400],
                   }}>
                   <View
                     style={{
                       width: `${percentage}%`,
-                      height: setHeight(7.5),
+                      height: setHeight(8.5),
+                      borderRadius: 10,
                       backgroundColor: palette.red[500],
                     }}
                   />
@@ -184,17 +197,17 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
           </View>
           <View
             style={{
+              flexDirection: 'row',
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <FlatList
-              data={HomeMenuData.HOME_MENU_DATA}
-              renderItem={renderItem}
-              keyExtractor={item => item.id}
-              scrollEnabled={false}
-              showsVerticalScrollIndicator={false}
-              numColumns={3}
-            />
+            {HomeMenuData.HOME_MENU_DATA.map(item => (
+              <ImageIcon
+                key={item.id}
+                imagePath={item.path}
+                onClick={() => handleIconClick(item.id)}
+              />
+            ))}
           </View>
         </View>
       </ImageBackground>
@@ -202,4 +215,4 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
   );
 };
 
-export default Home;
+export default Home2;

@@ -2,8 +2,9 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, StackNavigationProp} from '@react-navigation/stack';
 
+import OldHome from './src/pages/home/OldHome';
+
 import Home from './src/pages/home/Home';
-import Home2 from './src/pages/home/Home2';
 import Loading from './src/pages/Loading/Loading';
 import Store from './src/pages/store/Store';
 import Inventory from './src/pages/store/Inventory';
@@ -34,9 +35,10 @@ const ScreenItem = (
 
 function App(): React.JSX.Element {
   const ScreenList: any[] = [
+    ScreenItem('OldHome', OldHome, 'OldHome', false),
+
     ScreenItem('Loading', Loading, 'Loading', false),
     ScreenItem('Home', Home, 'Home', false),
-    ScreenItem('Home2', Home2, 'Home2', false),
     ScreenItem('Store', Store, 'Store', false),
     ScreenItem('Inventory', Inventory, 'Inventory', false),
     ScreenItem('TodoList', TodoList, 'TodoList', false),

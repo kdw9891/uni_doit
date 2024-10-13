@@ -9,7 +9,7 @@ import {TimerButton} from './HomeCompo';
 import {fontSize, fontStyle, setHeight} from '../../common/deviceUtils';
 import LottieView from 'lottie-react-native';
 
-const Home2: React.FC<ScreenProps> = ({navigation}) => {
+const Home: React.FC<ScreenProps> = ({navigation}) => {
   const percentage = 50;
 
   const [timer, setTimer] = useState(0);
@@ -65,13 +65,16 @@ const Home2: React.FC<ScreenProps> = ({navigation}) => {
   return (
     <>
       <ImageBackground
-        source={require('../../assets/newimages/white-background.jpg')}
+        source={require('../../assets/images/background_new.png')}
         style={{flex: 10}}>
         <View style={{flex: 0.7, alignItems: 'center'}}>
           <Header
             coin={300}
             toDoPress={() => {
               navigation.navigate('TodoList');
+            }}
+            onPress={() => {
+              navigation.navigate('Home');
             }}
           />
         </View>
@@ -84,7 +87,7 @@ const Home2: React.FC<ScreenProps> = ({navigation}) => {
           <View
             style={{
               flexDirection: 'row',
-              width: '60%',
+              width: '80%',
               justifyContent: 'space-evenly',
               alignItems: 'center',
             }}>
@@ -121,10 +124,10 @@ const Home2: React.FC<ScreenProps> = ({navigation}) => {
             loop={true}
           /> */}
           <Image
-            source={require('../../assets/images/cat_image.png')}
+            source={require('../../assets/images/cat_new.png')}
             style={{
               marginTop: '30%',
-              width: 280,
+              width: 250,
               justifyContent: 'center',
               resizeMode: 'contain',
             }}
@@ -184,14 +187,14 @@ const Home2: React.FC<ScreenProps> = ({navigation}) => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <FlatList
+            {/* <FlatList
               data={HomeMenuData.HOME_MENU_DATA}
               renderItem={renderItem}
               keyExtractor={item => item.id}
               scrollEnabled={false}
               showsVerticalScrollIndicator={false}
               numColumns={3}
-            />
+            /> */}
           </View>
         </View>
       </ImageBackground>
@@ -199,4 +202,4 @@ const Home2: React.FC<ScreenProps> = ({navigation}) => {
   );
 };
 
-export default Home2;
+export default Home;

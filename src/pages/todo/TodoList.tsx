@@ -5,6 +5,7 @@ import {Header} from '../../components/common/Header';
 import {palette} from '../../common/palette';
 import {useModal} from '../../common/hooks';
 import InfoModal from '../../components/common/InfoModal';
+import {setWidth} from '../../common/deviceUtils';
 
 const TodoList: React.FC<ScreenProps> = ({navigation}) => {
   const {isVisible, openModal, closeModal} = useModal();
@@ -13,16 +14,16 @@ const TodoList: React.FC<ScreenProps> = ({navigation}) => {
       <View style={{flex: 1}}>
         <Header
           centerIconProps={{
-            iconType: 'FontAwesome',
-            iconName: 'pencil',
-            color: palette.indigo[700],
-            size: 30,
+            iconName: 'null',
+            iconType: 'AntDesign',
+            imagePath: require('../../assets/newimages/todohead.png'),
+            size: setWidth(45),
           }}
           rightIconProps={{
             iconType: 'FontAwesome',
             iconName: 'info',
             color: palette.gray[800],
-            size: 30,
+            size: setWidth(30),
             onPress: openModal,
           }}
         />

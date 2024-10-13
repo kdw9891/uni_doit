@@ -9,7 +9,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import InventoryData from './InventoryData';
 import {storeItem} from '../../components/common/DynamicIcon';
 import {Background} from '../../components/layout/Background';
-import {fontSize, fontStyle} from '../../common/deviceUtils';
+import {fontSize, fontStyle, setWidth} from '../../common/deviceUtils';
 import ScrollArea from '../../components/layout/ScrollArea';
 
 const Section: React.FC<{title: string; data: any[]}> = ({title, data}) => (
@@ -52,16 +52,16 @@ const Inventory: React.FC<ScreenProps> = ({navigation}) => {
         <View style={{flex: 1}}>
           <Header
             centerIconProps={{
-              iconType: 'FontAwesome6',
-              iconName: 'box-archive',
-              color: palette.brown[600],
-              size: 30,
+              iconName: 'null',
+              iconType: 'AntDesign',
+              imagePath: require('../../assets/newimages/inventoryhead.png'),
+              size: setWidth(45),
             }}
             rightIconProps={{
               iconType: 'FontAwesome',
               iconName: 'info',
               color: palette.gray[800],
-              size: 30,
+              size: setWidth(30),
               onPress: openModal,
             }}
           />

@@ -1,36 +1,25 @@
-import {palette} from '../../common/palette';
-import {IconType, DataItem} from '../../common/types';
-
-const createDataSet = (items: Omit<DataItem, 'id'>[]): DataItem[] =>
-  items.map((item, index) => ({
-    ...item,
-    id: (index + 1).toString(),
-  }));
-
-// HomeMenuData
-const HOME_MENU_DATA = createDataSet([
+const HOME_MENU_DATA = [
   {
-    text: '',
-    iconType: 'FontAwesome5',
-    iconName: 'crown',
-    path: 'Rank',
-    iconColor: palette.amber[900],
+    id: '1',
+    path: require('../../assets/newimages/inventoryicon.png'),
+    route: 'Inventory',
   },
   {
-    text: '',
-    iconType: 'FontAwesome6',
-    iconName: 'box-archive',
-    path: 'Inventory',
-    iconColor: palette.brown[600],
+    id: '2',
+    path: require('../../assets/newimages/rankicon.png'),
+    route: 'Rank',
   },
   {
-    text: '',
-    iconType: 'FontAwesome5',
-    iconName: 'store',
-    path: 'Store',
-    iconColor: palette.green[800],
+    id: '3',
+    path: require('../../assets/newimages/shopicon.png'),
+    route: 'Store',
   },
-]);
+  {
+    id: '4',
+    path: require('../../assets/newimages/todoicon.png'),
+    route: 'TodoList',
+  },
+];
 
 export default {
   HOME_MENU_DATA,
