@@ -1,19 +1,10 @@
 import React, {useState} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  Alert,
-  Modal,
-  TextInput,
-} from 'react-native';
+import {Text, View, StyleSheet, FlatList, TouchableOpacity, Alert, Modal, TextInput} from 'react-native';
 import {ScreenProps} from '../../../App';
 import {Header} from '../../components/common/Header';
 import {palette} from '../../common/palette';
 import {useModal} from '../../common/hooks';
-import {setWidth, setHeight, fontSize} from '../../common/deviceUtils';
+import {setWidth, setHeight} from '../../common/deviceUtils';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const TodoList: React.FC<ScreenProps> = ({navigation}) => {
