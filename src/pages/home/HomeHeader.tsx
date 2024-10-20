@@ -82,6 +82,7 @@ export const Header = ({
           <TimerButton
             iconType="FontAwesome"
             iconName="info"
+            // 설정 아이콘 추가 예정
             iconStyle={{marginRight: setWidth(18)}}
             iconColor={palette.gray[800]}
             iconSize={setWidth(21)}

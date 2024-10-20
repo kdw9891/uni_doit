@@ -5,15 +5,12 @@ import {Header} from '../../components/common/Header';
 import {palette} from '../../common/palette';
 import {useModal} from '../../common/hooks';
 import {setWidth, setHeight} from '../../common/deviceUtils';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import InfoModal from '../../components/common/InfoModal';
 
 const TodoList: React.FC<ScreenProps> = ({navigation}) => {
   // InfoModal 상태
-  const {
-    isVisible: isInfoModalVisible,
-    openModal: openInfoModal,
-    closeModal: closeInfoModal,
-  } = useModal();
+  const {isVisible, openModal, closeModal} = useModal();
 
   // 할 일 추가 모달 상태
   const [isTodoModalVisible, setIsTodoModalVisible] = useState<boolean>(false);
@@ -64,29 +61,14 @@ const TodoList: React.FC<ScreenProps> = ({navigation}) => {
             iconName: 'info',
             color: palette.gray[800],
             size: setWidth(30),
-            onPress: openInfoModal,
+            onPress: openModal,
           }}
         />
 
         {/* InfoModal - TodoList 정보 표시 */}
-        <Modal
-          transparent={true}
-          visible={isInfoModalVisible}
-          onRequestClose={closeInfoModal}>
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>TodoList 정보</Text>
-              <Text style={{marginBottom: 20}}>
-                이곳은 할 일을 관리하는 앱입니다.
-              </Text>
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={closeInfoModal}>
-                <Text style={styles.modalButtonText}>닫기</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+        <InfoModal isVisible={isVisible} onClose={closeModal}>
+          <Text>{'랭크 정보'}</Text>
+        </InfoModal>
       </View>
 
       <View style={{flex: 9, paddingHorizontal: 20}}>
@@ -106,12 +88,12 @@ const TodoList: React.FC<ScreenProps> = ({navigation}) => {
       <TouchableOpacity
         style={styles.addButton}
         onPress={() => setIsTodoModalVisible(true)}>
-        <Icon name="plus" size={setWidth(25)} color={palette.white} />
+        <FontAwesome name="plus" size={setWidth(25)} color={palette.white} />
       </TouchableOpacity>
 
       {/* 할 일 추가 모달 */}
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={isTodoModalVisible}
         onRequestClose={() => setIsTodoModalVisible(false)}>
@@ -141,8 +123,8 @@ const TodoList: React.FC<ScreenProps> = ({navigation}) => {
 
 const styles = StyleSheet.create({
   todoItem: {
-    padding: 20,
-    marginVertical: 8,
+    padding: 15,
+    marginVertical: 4,
     backgroundColor: '#fff',
     borderRadius: 10,
     shadowColor: '#000',
