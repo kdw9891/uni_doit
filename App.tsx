@@ -4,6 +4,8 @@ import {createStackNavigator, StackNavigationProp} from '@react-navigation/stack
 
 import OldHome from './src/pages/home/OldHome';
 
+import Login from './src/pages/user/Login';
+
 import Home from './src/pages/home/Home';
 import Loading from './src/pages/Loading/Loading';
 import Store from './src/pages/store/Store';
@@ -37,6 +39,8 @@ function App(): React.JSX.Element {
   const ScreenList: any[] = [
     ScreenItem('OldHome', OldHome, 'OldHome', false),
 
+    ScreenItem('Login', Login, 'Login', false),
+
     ScreenItem('Loading', Loading, 'Loading', false),
     ScreenItem('Home', Home, 'Home', false),
     ScreenItem('Store', Store, 'Store', false),
@@ -47,7 +51,7 @@ function App(): React.JSX.Element {
   return (
     <>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="Login">
           {ScreenList.map((component: any, index: number) => {
             return (
               <React.Fragment key={`screenitem-${index}`}>

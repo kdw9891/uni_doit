@@ -1,8 +1,5 @@
 import {forwardRef, useRef, useState} from 'react';
-import {Text, TextInput, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-
-import InputStyles from './InputStyles';
+import {TextInput} from 'react-native';
 
 const Input = forwardRef((props: any, ref: any) => {
   const {style: _style, form, name, defaultValue, required, title, titleText, titleNumber, subTitle, onPress, keyboardType, showHeader = true, ...rest} = props;
@@ -46,23 +43,8 @@ const Input = forwardRef((props: any, ref: any) => {
     form.setValue(name, text);
   };
 
-  const titleTxt = titleText ? ` ( ${titleText} )` : '';
-
-  const titleNum = titleNumber ? ` ( ${titleNumber.toFixed(2)} )` : '';
   return (
     <>
-      {showHeader && (
-        <View style={[InputStyles.inputContainer]}>
-          <Text style={[InputStyles.inputTitle]}>
-            {title}
-            {titleTxt}
-            {titleNum}
-          </Text>
-          <TouchableOpacity onPress={onPress}>
-            <Text style={[InputStyles.inputSubTitle]}>{subTitle}</Text>
-          </TouchableOpacity>
-        </View>
-      )}
       <TextInput
         ref={ref}
         defaultValue={value}
