@@ -1,13 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Image,
-  ImageBackground,
-  View,
-  Text,
-  Alert,
-  TouchableOpacity,
-  Button,
-} from 'react-native';
+import {Image, ImageBackground, View, Text, Alert, TouchableOpacity, Button} from 'react-native';
 import {ScreenProps} from '../../../App';
 import {palette} from '../../common/palette';
 import {fontSize, fontStyle, setHeight} from '../../common/deviceUtils';
