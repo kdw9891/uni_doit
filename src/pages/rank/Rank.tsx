@@ -83,6 +83,15 @@ const Rank: React.FC<ScreenProps> = ({navigation}) => {
               </View>
             ))}
           </View>
+          <View
+            style={{
+              flex: 1,
+              width: '100%',
+              justifyContent: 'center',
+              alignContent: 'center',
+            }}>
+            <Text>{'내 순위'}</Text>
+          </View>
         </ScrollArea>
       </View>
     </View>

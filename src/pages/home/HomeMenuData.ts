@@ -1,22 +1,22 @@
 const HOME_MENU_DATA = [
   {
     id: '1',
-    path: require('../../assets/newimages/inventoryicon.png'),
+    path: require('../../assets/newimages/inventoryhead.png'),
     route: 'Inventory',
   },
   {
     id: '2',
-    path: require('../../assets/newimages/rankicon.png'),
+    path: require('../../assets/newimages/rankhead.png'),
     route: 'Rank',
   },
   {
     id: '3',
-    path: require('../../assets/newimages/shopicon.png'),
+    path: require('../../assets/newimages/shophead.png'),
     route: 'Store',
   },
   {
     id: '4',
-    path: require('../../assets/newimages/todoicon.png'),
+    path: require('../../assets/newimages/todohead.png'),
     route: 'TodoList',
   },
 ];

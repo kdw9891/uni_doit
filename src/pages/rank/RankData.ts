@@ -12,16 +12,6 @@ const rankData = {
     { id: 8, name: 'Nick8', time: '3 분'},
     { id: 9, name: 'Nick9', time: '2 분'},
     { id: 10, name: 'Nick10', time: '1 분'},
-    { id: 11, name: 'Nick11', time: '1 분'},
-    { id: 12, name: 'Nick12', time: '1 분'},
-    { id: 13, name: 'Nick13', time: '1 분'},
-    { id: 14, name: 'Nick14', time: '1 분'},
-    { id: 15, name: 'Nick15', time: '1 분'},
-    { id: 16, name: 'Nick16', time: '1 분'},
-    { id: 17, name: 'Nick17', time: '1 분'},
-    { id: 18, name: 'Nick18', time: '1 분'},
-    { id: 19, name: 'Nick19', time: '1 분'},
-    { id: 20, name: 'Nick20', time: '1 분'},
   ]
 };
 
