@@ -1,10 +1,9 @@
 import axios, { AxiosResponseHeaders, InternalAxiosRequestConfig, RawAxiosResponseHeaders } from 'axios';
-import { globalContext } from './globalContext';
-import { Alert } from 'react-native';
 
 export type HttpMethod = "get" | "put" | "post" | "delete" | "upload" | "download" | "downpost";
 
 export interface UniResponse<T = any, D = any> {
+  [x: string]: any;
   data: T;
   status: number;
   statusText: string;
@@ -13,48 +12,31 @@ export interface UniResponse<T = any, D = any> {
   request?: any;
 }
 
-const api: <T>(method: HttpMethod, url: string, params: {} | [] | FormData) =>
-  Promise<UniResponse<T, any>> = (method, url, params) => {
-  if (!url.startsWith("/doit"))
+const api: <T>(method: HttpMethod, url: string, params?: {} | [] | FormData) =>
+  Promise<UniResponse<T, any>> = async (method, url, params) => {
+  if (!url.startsWith("/doit")) {
     url = `/doit${!url.startsWith("/") ? "/" + url : url}`;
-  
-  const headers = {
-    Authorization: `Bearer ${globalContext.authToken}`,
-  };
-  
-  switch (method) {
-    case "get":
-      return axios.get(url, { params, headers: headers });
-    case "put":
-      return axios.put(url, params, { headers: headers });
-    case "post":
-      return axios.post(url, params, { headers: headers });
-    case "delete":
-      return axios.delete(url, { params, headers: headers });
-    case "upload":
-      const uploadHeaders = {...headers, ...{ "Content-Type": "multipart/form-data" }};
-      return axios.put(url, params, { headers: uploadHeaders });
-    case "download":
-      return axios.get(url, { params, headers: headers, responseType: "blob" });
-    case "downpost":
-      return axios.post(url, params, { headers: headers, responseType: "blob" });
-    }
-};
-
-axios.interceptors.response.use(response => {
-  return response;
-},
-error => {
-  if(error.response?.data == "TokenExpired"){
-    if(globalContext.authToken){
-      globalContext.authToken = null;
-      Alert.alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
-      globalContext.navigation.navigate('Login');
-      return;
-    }
   }
 
-  throw error;
-});
+  switch (method) {
+    case "get":
+      return axios.get(url, { params });
+    case "put":
+      return axios.put(url, params);
+    case "post":
+      return axios.post(url, params);
+    case "delete":
+      return axios.delete(url, { data: params });
+    case "upload":
+      const uploadHeaders = { "Content-Type": "multipart/form-data" };
+      return axios.put(url, params, { headers: uploadHeaders });
+    case "download":
+      return axios.get(url, { params, responseType: "blob" });
+    case "downpost":
+      return axios.post(url, params, { responseType: "blob" });
+    default:
+      throw new Error("Unsupported HTTP method");
+  }
+};
 
 export default api;

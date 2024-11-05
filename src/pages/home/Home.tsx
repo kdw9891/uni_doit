@@ -6,10 +6,13 @@ import {palette} from '../../common/palette';
 import HomeMenuData from './HomeMenuData';
 import {fontSize, fontStyle, setHeight} from '../../common/deviceUtils';
 import ImageIcon from '../../components/common/ImageIcon';
+import api from '../../common/api';
+import { globalContext } from '../../common/globalContext';
+import { API_HOST } from '@env';
+import axios from 'axios';
 
-const Home2: React.FC<ScreenProps> = ({navigation}) => {
-  const percentage = 50;
-
+const Home: React.FC<ScreenProps> = ({navigation}) => {
+  const [percentage, setPercentage] = useState(0);  
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
 
@@ -24,6 +27,34 @@ const Home2: React.FC<ScreenProps> = ({navigation}) => {
     }
     return () => clearInterval(interval!);
   }, [isRunning]);
+
+  useEffect(() => {
+    globalContext.navigation = navigation;
+    axios.defaults.baseURL = API_HOST;
+    loginhandler();
+    idfindhandler();
+  }, []);
+
+  const loginhandler = async () => {
+    const result = await api('get', '/user/login', {
+      user_id: 'admin',
+      password: 'admin',
+    });
+    globalContext.cacheDic = result.data;
+    console.log("globalContext.cacheDic login :  ",globalContext.cacheDic);
+    console.log("reuslt :  ",result.data);
+    console.log('로그인 성공');
+  }
+
+  const idfindhandler = async () => {
+    const result = await api('post', '/user/idfind', {
+      email: 'admin@example.com',
+    });
+    globalContext.cacheDic = result.data;
+    console.log("globalContext.cacheDic idfind :  ",globalContext.cacheDic);
+    console.log("reuslt :  ",result.data);
+    console.log('아이디 찾기 성공');
+  }
 
   const formatTime = (time: number) => {
     const getSeconds = `0${time % 60}`.slice(-2);
@@ -216,4 +247,4 @@ const Home2: React.FC<ScreenProps> = ({navigation}) => {
   );
 };
 
-export default Home2;
+export default Home;
