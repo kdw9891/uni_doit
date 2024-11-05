@@ -10,6 +10,7 @@ import api from '../../common/api';
 import { globalContext } from '../../common/globalContext';
 import { API_HOST } from '@env';
 import axios from 'axios';
+import { Dictionary } from '../../common/types';
 
 const Home: React.FC<ScreenProps> = ({navigation}) => {
   const [percentage, setPercentage] = useState(0);  
@@ -36,24 +37,21 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
   }, []);
 
   const loginhandler = async () => {
-    const result = await api('get', '/user/login', {
+    const result = await api<any>('get', '/user/login', {
       user_id: 'admin',
       password: 'admin',
     });
-    globalContext.cacheDic = result.data;
-    console.log("globalContext.cacheDic login :  ",globalContext.cacheDic);
-    console.log("reuslt :  ",result.data);
-    console.log('로그인 성공');
+    const user = result.data;
   }
 
   const idfindhandler = async () => {
-    const result = await api('post', '/user/idfind', {
+    const result = await api<any>('post', '/user/idfind', {
       email: 'admin@example.com',
     });
-    globalContext.cacheDic = result.data;
-    console.log("globalContext.cacheDic idfind :  ",globalContext.cacheDic);
-    console.log("reuslt :  ",result.data);
-    console.log('아이디 찾기 성공');
+    const idfinddata = result.data;
+    console.log( "idfinddata : ", idfinddata[0].email);
+    console.log( "idfinddata : ", idfinddata[0].user_id);
+    console.log( "idfinddata : ", idfinddata);
   }
 
   const formatTime = (time: number) => {
