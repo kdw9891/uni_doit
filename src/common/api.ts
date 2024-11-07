@@ -24,7 +24,11 @@ const api: <T>(method: HttpMethod, url: string, params?: {} | [] | FormData) =>
       case "put":
         return axios.put(url, params);
       case "post":
-        return axios.post(url, params);
+        if (params && typeof params === 'object' && !Array.isArray(params) && !(params instanceof FormData)) {
+          return axios.post(url, null, { params });
+        } else {
+          return axios.post(url, params);
+        }
       case "delete":
         return axios.delete(url, { data: params });
       case "upload":

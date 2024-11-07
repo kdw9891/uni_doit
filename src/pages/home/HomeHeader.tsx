@@ -10,11 +10,9 @@ import {useModal} from '../../common/hooks';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export const Header = ({
-  toDoPress,
   onPress,
   coin,
 }: {
-  toDoPress?: () => void;
   onPress?: () => void;
   coin: number;
 }) => {
@@ -34,7 +32,7 @@ export const Header = ({
             source={require('../../assets/newimages/coin.png')}
             style={{
               marginLeft: setWidth(15),
-              width: setWidth(60),
+              width: setWidth(75),
               height: setWidth(60),
               resizeMode: 'contain',
               position: 'absolute',
@@ -42,7 +40,7 @@ export const Header = ({
           />
           <Text
             style={{
-              marginLeft: setWidth(40),
+              marginLeft: setWidth(43),
               color: palette.gray[800],
               fontFamily: fontStyle.SemiBold,
               fontSize: fontSize(40),
@@ -59,16 +57,14 @@ export const Header = ({
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <TouchableOpacity onPress={onPress}>
-            <Image
-              source={require('../../assets/images/doit_logo.png')}
-              style={{
-                width: 130,
-                justifyContent: 'center',
-                resizeMode: 'contain',
-              }}
-            />
-          </TouchableOpacity>
+          <Image
+            source={require('../../assets/images/doit_logo.png')}
+            style={{
+              width: 130,
+              justifyContent: 'center',
+              resizeMode: 'contain',
+            }}
+          />
         </View>
         <View
           style={{
@@ -80,12 +76,11 @@ export const Header = ({
             justifyContent: 'flex-end',
           }}>
           <TimerButton
-            iconType="FontAwesome"
-            iconName="info"
-            // 설정 아이콘 추가 예정
+            iconType="MaterialIcons"
+            iconName="settings"
             iconStyle={{marginRight: setWidth(18)}}
             iconColor={palette.gray[800]}
-            iconSize={setWidth(21)}
+            iconSize={setWidth(25)}
             onPress={() => {
               openModal();
             }}
@@ -93,14 +88,6 @@ export const Header = ({
           <InfoModal isVisible={isVisible} onClose={closeModal}>
             <Text>{'Info Modal'}</Text>
           </InfoModal>
-          {/* <TimerButton
-            iconType="FontAwesome"
-            iconName="pencil"
-            iconStyle={{marginRight: setWidth(18)}}
-            iconColor={palette.gray[800]}
-            iconSize={setWidth(21)}
-            onPress={toDoPress}
-          /> */}
         </View>
       </View>
     </>
