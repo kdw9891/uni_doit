@@ -1,6 +1,6 @@
 import React from 'react';
-import {StyleSheet, Image} from 'react-native';
-import {fontSize, fontStyle} from '../../common/deviceUtils';
+import {StyleSheet, Image, Text} from 'react-native';
+import {fontSize, fontStyle, setWidth} from '../../common/deviceUtils';
 import {palette} from '../../common/palette';
 import {View} from 'react-native';
 import {Item} from './DynamicIcon';
@@ -18,15 +18,10 @@ interface IconProps {
 
 interface HeaderProps {
   centerIconProps: IconProps;
-  rightIconProps: IconProps;
-  ModalComponent?: React.ReactNode;
-  coinHeader?: boolean;
+  coin: number;
 }
 
-export const Header: React.FC<HeaderProps> = ({
-  centerIconProps,
-  rightIconProps,
-}) => {
+export const CoinHeader: React.FC<HeaderProps> = ({centerIconProps, coin}) => {
   return (
     <>
       <View style={[styles.container]}>
@@ -70,15 +65,28 @@ export const Header: React.FC<HeaderProps> = ({
           style={{
             flex: 1,
             flexDirection: 'row',
+            width: '100%',
+            height: '100%',
             alignItems: 'center',
-            justifyContent: 'flex-end',
           }}>
-          <Item
-            iconType={rightIconProps.iconType}
-            iconName={rightIconProps.iconName}
-            iconColor={rightIconProps.color}
-            onPress={rightIconProps.onPress}
+          <Image
+            source={require('../../assets/newimages/coin.png')}
+            style={{
+              marginLeft: setWidth(25),
+              width: setWidth(70),
+              resizeMode: 'contain',
+              position: 'absolute',
+            }}
           />
+          <Text
+            style={{
+              marginLeft: setWidth(52),
+              color: palette.gray[800],
+              fontFamily: fontStyle.SemiBold,
+              fontSize: fontSize(40),
+            }}>
+            {coin}
+          </Text>
         </View>
       </View>
     </>

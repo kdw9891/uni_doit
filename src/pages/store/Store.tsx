@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
 import {ScreenProps} from '../../../App';
 import {Header} from '../../components/common/Header';
@@ -6,11 +6,11 @@ import {palette} from '../../common/palette';
 import {useModal} from '../../common/hooks';
 import InfoModal from '../../components/common/InfoModal';
 import {FlatList} from 'react-native-gesture-handler';
-import StoreData from './StoreData';
-import {storeItem} from '../../components/common/DynamicIcon';
+import {renderImageItem} from '../../components/common/DynamicIcon';
 import {Background} from '../../components/layout/Background';
 import {fontSize, fontStyle, setWidth} from '../../common/deviceUtils';
 import ScrollArea from '../../components/layout/ScrollArea';
+import api from '../../common/api';
 
 const Section: React.FC<{title: string; data: any[]}> = ({title, data}) => (
   <View style={{alignItems: 'center'}}>
@@ -36,8 +36,8 @@ const Section: React.FC<{title: string; data: any[]}> = ({title, data}) => (
     </View>
     <FlatList
       data={data}
-      renderItem={storeItem}
-      keyExtractor={item => item.id}
+      renderItem={renderImageItem}
+      keyExtractor={(item, index) => `${item.id || index}`}
       numColumns={3}
       scrollEnabled={false}
     />
@@ -46,6 +46,45 @@ const Section: React.FC<{title: string; data: any[]}> = ({title, data}) => (
 
 const Store: React.FC<ScreenProps> = ({navigation}) => {
   const {isVisible, openModal, closeModal} = useModal();
+  const [categories, setCategories] = useState<
+    {category_name: string; category_id: number; items: any[]}[]
+  >([]);
+
+  useEffect(() => {
+    categoryHandler();
+  }, []);
+
+  const categoryHandler = async () => {
+    try {
+      const result = await api<any>('get', '/store/category', {});
+
+      const categoryData = await Promise.all(
+        result.data.map(async (cat: {category_name: string}) => {
+          console.log(
+            `Attempting to fetch items for item_category: ${cat.category_name}`,
+          );
+
+          const itemsResult = await api<any>('get', `/store/items`, {
+            item_category: cat.category_name,
+          });
+
+          const itemsData = itemsResult.data || [];
+
+          console.log(itemsData);
+
+          return {
+            category_name: cat.category_name,
+            items: itemsData,
+          };
+        }),
+      );
+
+      setCategories(categoryData);
+    } catch (error) {
+      console.error('Error fetching category or items data:', error);
+    }
+  };
+
   return (
     <Background>
       <View style={{flex: 10}}>
@@ -71,11 +110,13 @@ const Store: React.FC<ScreenProps> = ({navigation}) => {
         </View>
         <View style={{flex: 9}}>
           <ScrollArea>
-            <Section title="소모품" data={StoreData.CONSUMABLE_DATA} />
-            <Section title="특수 아이템" data={StoreData.SPECIAL_ITEMS_DATA} />
-            <Section title="커스터마이징" data={StoreData.CUSTOMIZING_DATA} />
-            <Section title="악세서리" data={StoreData.ACCESSORY_DATA} />
-            <Section title="친구" data={StoreData.COMPANION_ITEMS_DATA} />
+            {categories.map((category, index) => (
+              <Section
+                key={index}
+                title={category.category_name}
+                data={category.items}
+              />
+            ))}
           </ScrollArea>
         </View>
       </View>

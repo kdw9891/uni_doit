@@ -4,10 +4,12 @@ import {createStackNavigator, StackNavigationProp} from '@react-navigation/stack
 
 import Login from './src/pages/user/Login';
 
+import ItemStore from './src/pages/store/ItemStore';
+
 import Home from './src/pages/home/Home';
 import Loading from './src/pages/Loading/Loading';
 import Store from './src/pages/store/Store';
-import Inventory from './src/pages/store/Inventory';
+import Inventory from './src/pages/Inventory/Inventory';
 import TodoList from './src/pages/todo/TodoList';
 import Rank from './src/pages/rank/Rank';
 
@@ -40,6 +42,7 @@ function App(): React.JSX.Element {
     ScreenItem('Loading', Loading, 'Loading', false),
     ScreenItem('Home', Home, 'Home', false),
     ScreenItem('Store', Store, 'Store', false),
+    ScreenItem('ItemStore', ItemStore, 'ItemStore', false),
     ScreenItem('Inventory', Inventory, 'Inventory', false),
     ScreenItem('TodoList', TodoList, 'TodoList', false),
     ScreenItem('Rank', Rank, 'Rank', false),

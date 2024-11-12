@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Image} from 'react-native';
 import {palette} from '../../common/palette';
 import {StyleSheet} from 'react-native';
 import {setWidth, fontSize, fontStyle} from '../../common/deviceUtils';
@@ -14,7 +14,13 @@ export const DynamicIcon: React.FC<{
   style?: any;
   size?: number;
   color?: string;
-}> = ({iconType, iconName, style, size = setWidth(95), color = palette.black}) => {
+}> = ({
+  iconType,
+  iconName,
+  style,
+  size = setWidth(95),
+  color = palette.black,
+}) => {
   const IconComponent = IconComponents[iconType];
   if (!IconComponent) {
     console.warn(`Icon type "${iconType}" not found`);
@@ -37,7 +43,17 @@ export const Item: React.FC<{
   iconColor?: string;
   iconSize?: number;
   onPress?: () => void;
-}> = ({viewStyle = styles.item, text, iconType, iconName, iconStyle = styles.iconBox, path, iconColor, iconSize = setWidth(25), onPress}) => {
+}> = ({
+  viewStyle = styles.item,
+  text,
+  iconType,
+  iconName,
+  iconStyle = styles.iconBox,
+  path,
+  iconColor,
+  iconSize = setWidth(25),
+  onPress,
+}) => {
   const navigation = useNavigation();
 
   const handlePress = () => {
@@ -91,20 +107,95 @@ export const renderItem = ({item}: {item: any}) => (
 );
 //#endregion renderItem
 
-//#region storeItem
-export const storeItem = ({item}: {item: any}) => (
-  <Item
+// //#region storeItem
+// export const storeItem = ({item}: {item: any}) => (
+//   <Item
+//     viewStyle={styles.menuItem}
+//     text={item.text}
+//     iconType={item.iconType}
+//     iconName={item.iconName}
+//     path={item.path}
+//     iconSize={setWidth(35)}
+//     iconStyle={item.iconStyle}
+//     iconColor={item.iconColor}
+//   />
+// );
+// //#endregion storeItem
+
+// ImageItem 컴포넌트 수정
+export const ImageItem: React.FC<{
+  viewStyle?: any;
+  text?: string;
+  iconStyle?: any;
+  path?: string;
+  image_url: string | null;
+  item_price: number;
+  onPress?: () => void;
+}> = ({
+  viewStyle = styles.item,
+  iconStyle = styles.iconBox,
+  text,
+  path,
+  image_url,
+  item_price,
+  onPress,
+}) => {
+  const navigation = useNavigation();
+
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    } else if (path) {
+      navigation.navigate(path as never);
+    }
+  };
+
+  return (
+    <View>
+      <TouchableOpacity onPress={handlePress}>
+        <View style={viewStyle}>
+          {image_url ? ( // image_url이 유효할 때만 이미지 렌더링
+            <Image
+              style={[
+                iconStyle,
+                {
+                  resizeMode: 'contain',
+                  width: setWidth(40),
+                  height: setWidth(40),
+                },
+              ]}
+              source={{uri: image_url}}
+            />
+          ) : (
+            <Image
+              style={[
+                iconStyle,
+                {
+                  resizeMode: 'contain',
+                  width: setWidth(40),
+                  height: setWidth(40),
+                },
+              ]}
+              source={require('../../assets/newimages/doit_logo.png')}
+            />
+          )}
+          {text && <Text style={styles.text}>{text}</Text>}
+          <Text style={styles.coinText}>{item_price} 코인</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+// renderImageItem에서 image_url을 올바르게 전달
+export const renderImageItem = ({item}: {item: any}) => (
+  <ImageItem
     viewStyle={styles.menuItem}
-    text={item.text}
-    iconType={item.iconType}
-    iconName={item.iconName}
-    path={item.path}
-    iconSize={setWidth(35)}
-    iconStyle={item.iconStyle}
-    iconColor={item.iconColor}
+    image_url={item.image_url || null}
+    item_price={item.item_price}
+    text={item.item_name}
   />
 );
-//#endregion storeItem
 
 const styles = StyleSheet.create({
   //#region renderItem
@@ -120,6 +211,12 @@ const styles = StyleSheet.create({
     fontSize: fontSize(30),
     color: palette.black,
   },
+  coinText: {
+    textAlign: 'center',
+    fontFamily: fontStyle.Bold,
+    fontSize: fontSize(30),
+    color: palette.deepOrange[400],
+  },
   iconBox: {
     textAlign: 'center',
     textAlignVertical: 'center',
@@ -130,8 +227,8 @@ const styles = StyleSheet.create({
   menuItem: {
     marginHorizontal: 20,
     marginVertical: 20,
-    width: setWidth(65),
-    height: setWidth(70),
+    width: setWidth(70),
+    height: setWidth(95),
     alignItems: 'center',
     justifyContent: 'center',
   },

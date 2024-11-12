@@ -18,6 +18,7 @@ import api from '../../common/api';
 import {globalContext} from '../../common/globalContext';
 import {API_HOST} from '@env';
 import axios from 'axios';
+import { toStorage } from '../../common/utility';
 
 const Home: React.FC<ScreenProps> = ({navigation}) => {
   const [percentage, setPercentage] = useState(0);
@@ -57,6 +58,8 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
       password: 'admin',
     });
     const user = result.data;
+    toStorage(user);
+
     globalContext.user = user;
   };
 
@@ -71,6 +74,8 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
     });
 
     const homeList = result.data;
+    toStorage(homeList[0]);
+    
     setPercentage(homeList[0].progress_percent);
     setCoin(homeList[0].total_points);
     setLevel(homeList[0].cat_level);
@@ -85,10 +90,12 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
           'and study_time:',
           studyTime,
         );
-        await api('post', '/home/timer', {
+        const result = await api('post', '/home/timer', {
           user_id: globalContext.user.user_id,
           study_time: studyTime,
         });
+        homeListhandler();
+        console.log('Study time sent successfully:', result);
       } catch (error: any) {
         console.error(
           'Failed to send study time:',
