@@ -1,13 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Image,
-  ImageBackground,
-  View,
-  Text,
-  Alert,
-  TouchableOpacity,
-  Button,
-} from 'react-native';
+import {Image, ImageBackground, View, Text, Alert, TouchableOpacity, Button, ActivityIndicator} from 'react-native';
 import {ScreenProps} from '../../../App';
 import {Header} from './HomeHeader';
 import {palette} from '../../common/palette';
@@ -26,7 +18,8 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
   const [level, setLevel] = useState(0);
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [isTestMode, setIsTestMode] = useState(false); // State for test mode
+  const [isTestMode, setIsTestMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -47,6 +40,8 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
 
       await loginhandler();
       await homeListhandler();
+
+      setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 종료
     };
 
     initialize();
@@ -153,6 +148,14 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
       navigation.navigate(item.route);
     }
   };
+
+  if (isLoading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="black" />
+      </View>
+    );
+  }
 
   return (
     <>

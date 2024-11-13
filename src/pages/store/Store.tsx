@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, ActivityIndicator} from 'react-native';
 import {ScreenProps} from '../../../App';
 import {Header} from '../../components/common/Header';
 import {palette} from '../../common/palette';
@@ -49,6 +49,7 @@ const Store: React.FC<ScreenProps> = ({navigation}) => {
   const [categories, setCategories] = useState<
     {category_name: string; category_id: number; items: any[]}[]
   >([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     categoryHandler();
@@ -57,7 +58,7 @@ const Store: React.FC<ScreenProps> = ({navigation}) => {
   const categoryHandler = async () => {
     try {
       const result = await api<any>('get', '/store/category', {});
-
+      
       const categoryData = await Promise.all(
         result.data.map(async (cat: {category_name: string}) => {
           console.log(
@@ -82,8 +83,18 @@ const Store: React.FC<ScreenProps> = ({navigation}) => {
       setCategories(categoryData);
     } catch (error) {
       console.error('Error fetching category or items data:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <Background>
+        <ActivityIndicator size="large" color={palette.black} style={{flex: 1, justifyContent: 'center'}} />
+      </Background>
+    );
+  }
 
   return (
     <Background>
@@ -99,7 +110,7 @@ const Store: React.FC<ScreenProps> = ({navigation}) => {
             rightIconProps={{
               iconType: 'FontAwesome',
               iconName: 'info',
-              color: palette.gray[800],
+              color: palette.gray[600],
               size: setWidth(30),
               onPress: openModal,
             }}

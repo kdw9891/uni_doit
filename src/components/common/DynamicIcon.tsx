@@ -6,6 +6,8 @@ import {setWidth, fontSize, fontStyle} from '../../common/deviceUtils';
 import {IconComponents, IconType} from '../../common/IconType';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
+import InfoModal from './InfoModal';
+import {useModal} from '../../common/hooks';
 
 //#region DynamicIcon
 export const DynamicIcon: React.FC<{
@@ -122,7 +124,6 @@ export const renderItem = ({item}: {item: any}) => (
 // );
 // //#endregion storeItem
 
-// ImageItem 컴포넌트 수정
 export const ImageItem: React.FC<{
   viewStyle?: any;
   text?: string;
@@ -140,21 +141,18 @@ export const ImageItem: React.FC<{
   item_price,
   onPress,
 }) => {
-  const navigation = useNavigation();
+  
+  const { isVisible, openModal, closeModal } = useModal();
 
   const handlePress = () => {
-    if (onPress) {
-      onPress();
-    } else if (path) {
-      navigation.navigate(path as never);
-    }
+    openModal(); // 모달 열기
   };
 
   return (
     <View>
       <TouchableOpacity onPress={handlePress}>
         <View style={viewStyle}>
-          {image_url ? ( // image_url이 유효할 때만 이미지 렌더링
+          {image_url ? (
             <Image
               style={[
                 iconStyle,
@@ -164,7 +162,7 @@ export const ImageItem: React.FC<{
                   height: setWidth(40),
                 },
               ]}
-              source={{uri: image_url}}
+              source={{ uri: image_url }}
             />
           ) : (
             <Image
@@ -172,8 +170,8 @@ export const ImageItem: React.FC<{
                 iconStyle,
                 {
                   resizeMode: 'contain',
-                  width: setWidth(40),
-                  height: setWidth(40),
+                  width: setWidth(44),
+                  height: setWidth(44),
                 },
               ]}
               source={require('../../assets/newimages/doit_logo.png')}
@@ -183,9 +181,14 @@ export const ImageItem: React.FC<{
           <Text style={styles.coinText}>{item_price} 코인</Text>
         </View>
       </TouchableOpacity>
+
+      <InfoModal isVisible={isVisible} onClose={closeModal}>
+        <Text>{'상점 정보'}</Text>
+      </InfoModal>
     </View>
   );
 };
+
 
 // renderImageItem에서 image_url을 올바르게 전달
 export const renderImageItem = ({item}: {item: any}) => (
