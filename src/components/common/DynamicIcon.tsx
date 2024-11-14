@@ -127,6 +127,8 @@ export const renderItem = ({item}: {item: any}) => (
 export const ImageItem: React.FC<{
   viewStyle?: any;
   text?: string;
+  inventory?: boolean;
+  quantity?: number;
   iconStyle?: any;
   path?: string;
   image_url: string | null;
@@ -136,13 +138,14 @@ export const ImageItem: React.FC<{
   viewStyle = styles.item,
   iconStyle = styles.iconBox,
   text,
+  inventory,
+  quantity,
   path,
   image_url,
   item_price,
   onPress,
 }) => {
-  
-  const { isVisible, openModal, closeModal } = useModal();
+  const {isVisible, openModal, closeModal} = useModal();
 
   const handlePress = () => {
     openModal(); // 모달 열기
@@ -153,31 +156,53 @@ export const ImageItem: React.FC<{
       <TouchableOpacity onPress={handlePress}>
         <View style={viewStyle}>
           {image_url ? (
-            <Image
-              style={[
-                iconStyle,
-                {
-                  resizeMode: 'contain',
-                  width: setWidth(40),
-                  height: setWidth(40),
-                },
-              ]}
-              source={{ uri: image_url }}
-            />
+            <>
+              <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                <Image
+                  style={[
+                    iconStyle,
+                    {
+                      resizeMode: 'contain',
+                      width: setWidth(40),
+                      height: setWidth(40),
+                    },
+                  ]}
+                  source={{uri: image_url}}
+                />
+                {quantity && (
+                  <Text style={styles.quantityText}>
+                    {quantity}
+                    {'개'}
+                  </Text>
+                )}
+              </View>
+            </>
           ) : (
-            <Image
-              style={[
-                iconStyle,
-                {
-                  resizeMode: 'contain',
-                  width: setWidth(44),
-                  height: setWidth(44),
-                },
-              ]}
-              source={require('../../assets/newimages/doit_logo.png')}
-            />
+            <>
+              <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                <Image
+                  style={[
+                    iconStyle,
+                    {
+                      resizeMode: 'contain',
+                      width: setWidth(44),
+                      height: setWidth(44),
+                    },
+                  ]}
+                  source={require('../../assets/newimages/doit_logo.png')}
+                />
+                {quantity && (
+                  <Text style={styles.quantityText}>
+                    {quantity}
+                    {'개'}
+                  </Text>
+                )}
+              </View>
+            </>
           )}
-          {text && <Text style={styles.text}>{text}</Text>}
+          <View style={{flexDirection: 'column'}}>
+            {text && <Text style={styles.text}>{text}</Text>}
+          </View>
           <Text style={styles.coinText}>{item_price} 코인</Text>
         </View>
       </TouchableOpacity>
@@ -189,7 +214,6 @@ export const ImageItem: React.FC<{
   );
 };
 
-
 // renderImageItem에서 image_url을 올바르게 전달
 export const renderImageItem = ({item}: {item: any}) => (
   <ImageItem
@@ -197,6 +221,7 @@ export const renderImageItem = ({item}: {item: any}) => (
     image_url={item.image_url || null}
     item_price={item.item_price}
     text={item.item_name}
+    quantity={item.quantity}
   />
 );
 
@@ -213,6 +238,12 @@ const styles = StyleSheet.create({
     fontFamily: fontStyle.Bold,
     fontSize: fontSize(30),
     color: palette.black,
+  },
+  quantityText: {
+    textAlign: 'center',
+    fontFamily: fontStyle.Bold,
+    fontSize: fontSize(30),
+    color: palette.blueGray[900],
   },
   coinText: {
     textAlign: 'center',

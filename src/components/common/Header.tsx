@@ -18,7 +18,7 @@ interface IconProps {
 
 interface HeaderProps {
   centerIconProps: IconProps;
-  rightIconProps: IconProps;
+  rightIconProps?: IconProps;
   ModalComponent?: React.ReactNode;
   coinHeader?: boolean;
 }
@@ -73,12 +73,14 @@ export const Header: React.FC<HeaderProps> = ({
             alignItems: 'center',
             justifyContent: 'flex-end',
           }}>
-          <Item
-            iconType={rightIconProps.iconType}
-            iconName={rightIconProps.iconName}
-            iconColor={rightIconProps.color}
-            onPress={rightIconProps.onPress}
-          />
+          {rightIconProps && (
+            <Item
+              iconType={rightIconProps.iconType}
+              iconName={rightIconProps.iconName}
+              iconColor={rightIconProps.color}
+              onPress={rightIconProps.onPress}
+            />
+          )}
         </View>
       </View>
     </>
