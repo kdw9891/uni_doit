@@ -4,7 +4,7 @@ import {ScreenProps} from '../../../App';
 import {Header} from '../../components/common/Header';
 import {palette} from '../../common/palette';
 import {useModal} from '../../common/hooks';
-import InfoModal from '../../components/common/InfoModal';
+import ItemModal from '../../components/common/ItemModal';
 import {FlatList} from 'react-native-gesture-handler';
 import {renderImageItem} from '../../components/common/DynamicIcon';
 import {Background} from '../../components/layout/Background';
@@ -115,17 +115,14 @@ const Inventory: React.FC<ScreenProps> = ({navigation}) => {
               imagePath: require('../../assets/newimages/inventoryhead.png'),
               size: setWidth(45),
             }}
-            rightIconProps={{
-              iconType: 'FontAwesome',
-              iconName: 'info',
-              color: palette.gray[600],
-              size: setWidth(30),
-              onPress: openModal,
-            }}
+            // rightIconProps={{
+            //   iconType: 'FontAwesome',
+            //   iconName: 'info',
+            //   color: palette.gray[600],
+            //   size: setWidth(30),
+            //   onPress: openModal,
+            // }}
           />
-          <InfoModal isVisible={isVisible} onClose={closeModal}>
-            <Text>{'상점 정보'}</Text>
-          </InfoModal>
         </View>
         <View style={{flex: 9}}>
           <ScrollArea>

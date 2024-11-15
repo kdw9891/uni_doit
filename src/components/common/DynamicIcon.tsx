@@ -7,6 +7,7 @@ import {IconComponents, IconType} from '../../common/IconType';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import InfoModal from './InfoModal';
+import ItemModal from './ItemModal';
 import {useModal} from '../../common/hooks';
 
 //#region DynamicIcon
@@ -126,90 +127,104 @@ export const renderItem = ({item}: {item: any}) => (
 
 export const ImageItem: React.FC<{
   viewStyle?: any;
-  text?: string;
-  inventory?: boolean;
-  quantity?: number;
   iconStyle?: any;
-  path?: string;
-  image_url: string | null;
-  item_price: number;
-  onPress?: () => void;
+  item: {
+    text: string;
+    quantity?: number;
+    image_url: string | null;
+    item_price?: number;
+    item_name: string;
+    item_rarity: string;
+    image_description: string;
+  };
+  onConfirm: () => void;
 }> = ({
   viewStyle = styles.item,
   iconStyle = styles.iconBox,
-  text,
-  inventory,
-  quantity,
-  path,
-  image_url,
-  item_price,
-  onPress,
+  item,
+  onConfirm,
 }) => {
   const {isVisible, openModal, closeModal} = useModal();
 
   const handlePress = () => {
-    openModal(); // 모달 열기
+    openModal();
   };
 
   return (
     <View>
       <TouchableOpacity onPress={handlePress}>
         <View style={viewStyle}>
-          {image_url ? (
-            <>
-              <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                <Image
-                  style={[
-                    iconStyle,
-                    {
-                      resizeMode: 'contain',
-                      width: setWidth(40),
-                      height: setWidth(40),
-                    },
-                  ]}
-                  source={{uri: image_url}}
-                />
-                {quantity && (
-                  <Text style={styles.quantityText}>
-                    {quantity}
-                    {'개'}
-                  </Text>
-                )}
-              </View>
-            </>
+          {item.image_url ? (
+            <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+              <Image
+                style={[
+                  iconStyle,
+                  {
+                    resizeMode: 'contain',
+                    width: setWidth(40),
+                    height: setWidth(40),
+                  },
+                ]}
+                source={
+                  item.image_url && typeof item.image_url === 'string'
+                    ? {uri: item.image_url}
+                    : require('../../assets/newimages/doit_logo.png')
+                }
+              />
+              {item.quantity && (
+                <Text style={styles.quantityText}>
+                  {item.quantity}
+                  {'개'}
+                </Text>
+              )}
+            </View>
           ) : (
-            <>
-              <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                <Image
-                  style={[
-                    iconStyle,
-                    {
-                      resizeMode: 'contain',
-                      width: setWidth(44),
-                      height: setWidth(44),
-                    },
-                  ]}
-                  source={require('../../assets/newimages/doit_logo.png')}
-                />
-                {quantity && (
-                  <Text style={styles.quantityText}>
-                    {quantity}
-                    {'개'}
-                  </Text>
-                )}
-              </View>
-            </>
+            <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+              <Image
+                style={[
+                  iconStyle,
+                  {
+                    resizeMode: 'contain',
+                    width: setWidth(44),
+                    height: setWidth(44),
+                  },
+                ]}
+                source={require('../../assets/newimages/doit_logo.png')}
+              />
+              {item.quantity && (
+                <Text style={styles.quantityText}>
+                  {item.quantity}
+                  {'개'}
+                </Text>
+              )}
+            </View>
           )}
           <View style={{flexDirection: 'column'}}>
-            {text && <Text style={styles.text}>{text}</Text>}
+            {item.text && <Text style={styles.text}>{item.text}</Text>}
           </View>
-          <Text style={styles.coinText}>{item_price} 코인</Text>
+          {item.item_price && (
+            <Text style={styles.coinText}>{item.item_price} 코인</Text>
+          )}
         </View>
       </TouchableOpacity>
-
-      <InfoModal isVisible={isVisible} onClose={closeModal}>
-        <Text>{'상점 정보'}</Text>
-      </InfoModal>
+      {item.item_price ? (
+        <InfoModal isVisible={isVisible} onClose={closeModal}>
+          <Text>{'상점 정보'}</Text>
+        </InfoModal>
+      ) : (
+        <ItemModal
+          isVisible={isVisible}
+          onClose={closeModal}
+          item={{
+            item_name: item.item_name,
+            item_rarity: item.item_rarity,
+            image_description: item.image_description,
+            image_url: item.image_url || '',
+          }}
+          buttonText={'사용'}
+          onConfirm={onConfirm}
+        />
+      )}
     </View>
   );
 };
@@ -218,10 +233,16 @@ export const ImageItem: React.FC<{
 export const renderImageItem = ({item}: {item: any}) => (
   <ImageItem
     viewStyle={styles.menuItem}
-    image_url={item.image_url || null}
-    item_price={item.item_price}
-    text={item.item_name}
-    quantity={item.quantity}
+    item={{
+      text: item.item_name,
+      quantity: item.quantity,
+      image_url: item.image_url,
+      item_price: item.item_price,
+      item_name: item.item_name,
+      item_rarity: item.item_rarity,
+      image_description: item.item_description,
+    }}
+    onConfirm={() => console.log('구매 또는 사용')}
   />
 );
 

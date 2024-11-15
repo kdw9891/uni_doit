@@ -1,26 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Image,
-  Text,
-  View,
-  ActivityIndicator,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
-import { ScreenProps } from '../../../App';
-import { Header } from '../../components/common/Header';
-import { palette } from '../../common/palette';
-import { useModal } from '../../common/hooks';
+import React, {useEffect, useState} from 'react';
+import {Image, Text, View, ActivityIndicator, StyleSheet, TouchableOpacity} from 'react-native';
+import {ScreenProps} from '../../../App';
+import {Header} from '../../components/common/Header';
+import {palette} from '../../common/palette';
+import {useModal} from '../../common/hooks';
 import InfoModal from '../../components/common/InfoModal';
-import { fontSize, setHeight, setWidth } from '../../common/deviceUtils';
+import {fontSize, setHeight, setWidth} from '../../common/deviceUtils';
 import ScrollArea from '../../components/layout/ScrollArea';
 import api from '../../common/api';
-import { globalContext } from '../../common/globalContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {getCurrentWeekNumber} from '../../common/utility';
 
-const Rank: React.FC<ScreenProps> = ({ navigation }) => {
-  const { isVisible, openModal, closeModal } = useModal();
-  const [rankInfo, setRankInfo] = useState<any>(null);
+const Rank: React.FC<ScreenProps> = ({navigation}) => {
+  const {isVisible, openModal, closeModal} = useModal();
+  const [rankInfo, setRankInfo] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [week, setWeek] = useState<number>(getCurrentWeekNumber());
   const maxWeek = getCurrentWeekNumber();
@@ -37,34 +30,36 @@ const Rank: React.FC<ScreenProps> = ({ navigation }) => {
     setError(null);
     try {
       let response;
-  
+
       if (weekNumber === maxWeek) {
         response = await api<any>('get', '/rank/list', {});
       } else {
         response = await api<any>('get', '/rank/history', {
-          params: { week_number: weekNumber },
+          week_number: weekNumber,
         });
       }
-  
+
       console.log('Rank data:', response.data);
-      setRankInfo(response.data || []);
-      
-      if (!response.data) {
-        setError("해당 주차에 데이터가 없습니다.");
+
+      // 데이터가 "RSLT_CD": "01"인 경우 데이터 없음으로 처리
+      if (response.data?.RSLT_CD === '01') {
+        setRankInfo([]);
+        setError('해당 주차에 데이터가 없습니다.');
+      } else {
+        setRankInfo(response.data || []);
       }
     } catch (error: any) {
       setRankInfo([]);
       if (error.message === 'Network Error') {
-        setError("네트워크 연결을 확인하세요.");
+        setError('네트워크 연결을 확인하세요.');
       } else {
-        setError("해당 주차에 데이터가 없습니다.");
+        setError('해당 주차에 데이터가 없습니다');
       }
       console.warn('Warn fetching rank data null');
     } finally {
       setLoading(false);
     }
   };
-  
 
   useEffect(() => {
     fetchRankData(week);
@@ -87,8 +82,8 @@ const Rank: React.FC<ScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <View style={{ flex: 10 }}>
-      <View style={{ flex: 1 }}>
+    <View style={{flex: 10}}>
+      <View style={{flex: 1}}>
         <Header
           centerIconProps={{
             iconName: 'null',
@@ -102,14 +97,27 @@ const Rank: React.FC<ScreenProps> = ({ navigation }) => {
         </InfoModal>
       </View>
 
-      <View style={{ flex: 9, borderTopWidth: 0.5, borderTopColor: palette.gray[300] }}>
+      <View
+        style={{
+          flex: 9,
+          borderTopWidth: 0.5,
+          borderTopColor: palette.gray[300],
+        }}>
         <View style={styles.weekNavigation}>
           <TouchableOpacity onPress={goToPreviousWeek} style={styles.navIcon}>
-            <Icon name="arrow-left" size={setHeight(20)} color={palette.gray[600]} />
+            <Icon
+              name="caret-left"
+              size={setHeight(20)}
+              color={palette.gray[600]}
+            />
           </TouchableOpacity>
-          <Text style={styles.weekDisplay}>{`주차: ${week}주`}</Text>
+          <Text style={styles.weekDisplay}>{`${week}주`}</Text>
           <TouchableOpacity onPress={goToNextWeek} style={styles.navIcon}>
-            <Icon name="arrow-right" size={setHeight(20)} color={palette.gray[600]} />
+            <Icon
+              name="caret-right"
+              size={setHeight(20)}
+              color={palette.gray[600]}
+            />
           </TouchableOpacity>
         </View>
 
@@ -122,25 +130,33 @@ const Rank: React.FC<ScreenProps> = ({ navigation }) => {
           <>
             {/* 상위 3위 영역 */}
             <View style={styles.topThreeContainer}>
-              {rankInfo.slice(0, 3).map((rank: any, index: number) => (
-                <View key={rank.user_id} style={styles.topRankItem}>
-                  <Image source={medalImages[index]} style={styles.rankImage} />
-                  <Text style={styles.rankName}>{rank.user_nickname}</Text>
-                  <Text style={styles.rankTime}>{rank.total_study_time} 분</Text>
-                </View>
-              ))}
-            </View>
-
-            {/* 나머지 순위 영역 */}
-            <ScrollArea>
-              <View style={styles.otherRanksContainer}>
-                {rankInfo.slice(3).map((rank: any, index: number) => (
-                  <View key={rank.user_id} style={styles.rankItem}>
-                    <Text style={styles.rankPosition}>{index + 4}</Text>
+              {Array.isArray(rankInfo) &&
+                rankInfo.slice(0, 3).map((rank: any, index: number) => (
+                  <View key={rank.user_id} style={styles.topRankItem}>
+                    <Image
+                      source={medalImages[index]}
+                      style={styles.rankImage}
+                    />
                     <Text style={styles.rankName}>{rank.user_nickname}</Text>
-                    <Text style={styles.rankTime}>{rank.total_study_time} 분</Text>
+                    <Text style={styles.rankTime}>
+                      {rank.total_study_time} 분
+                    </Text>
                   </View>
                 ))}
+            </View>
+
+            <ScrollArea>
+              <View style={styles.otherRanksContainer}>
+                {Array.isArray(rankInfo) &&
+                  rankInfo.slice(3).map((rank: any, index: number) => (
+                    <View key={rank.user_id} style={styles.rankItem}>
+                      <Text style={styles.rankPosition}>{index + 4}</Text>
+                      <Text style={styles.rankName}>{rank.user_nickname}</Text>
+                      <Text style={styles.rankTime}>
+                        {rank.total_study_time} 분
+                      </Text>
+                    </View>
+                  ))}
               </View>
             </ScrollArea>
           </>
@@ -160,6 +176,7 @@ const styles = StyleSheet.create({
   },
   navIcon: {
     paddingHorizontal: 15,
+    marginHorizontal: 100,
   },
   topThreeContainer: {
     flexDirection: 'row',
@@ -215,15 +232,9 @@ const styles = StyleSheet.create({
   },
   noDataText: {
     fontSize: 18,
+    fontWeight: 'bold',
     color: palette.gray[500],
   },
 });
-
-const getCurrentWeekNumber = () => {
-  const now = new Date();
-  const startOfYear = new Date(now.getFullYear(), 0, 1);
-  const days = Math.floor((now.getTime() - startOfYear.getTime()) / (24 * 60 * 60 * 1000));
-  return Math.ceil((days + startOfYear.getDay() + 1) / 7);
-};
 
 export default Rank;
