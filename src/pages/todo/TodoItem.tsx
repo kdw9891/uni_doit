@@ -26,9 +26,9 @@ const TodoItem: React.FC<TodoItemProps> = ({ title, isChecked, onCheck, onEdit, 
       </TouchableOpacity>
       <Text style={[styles.title, isChecked && styles.checkedTitle]}>{title}</Text>
       <View style={styles.icons}>
-        {/* <TouchableOpacity onPress={onEdit} style={styles.iconButton}>
+        <TouchableOpacity onPress={onEdit} style={styles.iconButton}>
           <Ionicons name="pencil" size={setWidth(15)} color={palette.black} />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
         <TouchableOpacity onPress={onDelete} style={styles.iconButton}>
           <Feather name="trash" size={setWidth(15)} color={palette.black} />
         </TouchableOpacity>
