@@ -1,20 +1,24 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
-import { setWidth } from '../../common/deviceUtils';
-import { palette } from '../../common/palette';
+import {setWidth} from '../../common/deviceUtils';
+import {palette} from '../../common/palette';
 
 interface TodoItemProps {
   title: string;
-  isChecked: boolean; // 완료 여부를 나타내는 상태
-  onCheck: () => void; // 체크 이벤트
-  onEdit: () => void; // 수정 이벤트
-  onDelete: () => void; // 삭제 이벤트
+  isChecked: boolean; // 완료 여부
+  onCheck: () => void; // 완료 처리
+  onEdit: () => void; // 수정
+  onDelete: () => void; // 삭제
 }
 
-const TodoItem: React.FC<TodoItemProps> = ({ title, isChecked, onCheck, onEdit, onDelete }) => {
+const TodoItem: React.FC<TodoItemProps> = ({
+  title,
+  isChecked,
+  onCheck,
+  onEdit,
+  onDelete,
+}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onCheck} style={styles.checkButton}>
@@ -24,13 +28,21 @@ const TodoItem: React.FC<TodoItemProps> = ({ title, isChecked, onCheck, onEdit, 
           color={palette.black}
         />
       </TouchableOpacity>
-      <Text style={[styles.title, isChecked && styles.checkedTitle]}>{title}</Text>
+      <Text style={[styles.title, isChecked && styles.checkedTitle]}>
+        {title}
+      </Text>
       <View style={styles.icons}>
-        <TouchableOpacity onPress={onEdit} style={styles.iconButton}>
-          <Ionicons name="pencil" size={setWidth(15)} color={palette.black} />
-        </TouchableOpacity>
+        {!isChecked && (
+          <TouchableOpacity onPress={onEdit} style={styles.iconButton}>
+            <FontAwesome
+              name="pencil"
+              size={setWidth(15)}
+              color={palette.blue[500]}
+            />
+          </TouchableOpacity>
+        )}
         <TouchableOpacity onPress={onDelete} style={styles.iconButton}>
-          <Feather name="trash" size={setWidth(15)} color={palette.black} />
+          <FontAwesome name="trash" size={setWidth(15)} color={palette.red[500]} />
         </TouchableOpacity>
       </View>
     </View>

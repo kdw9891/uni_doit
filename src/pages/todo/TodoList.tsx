@@ -21,7 +21,7 @@ const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Array<any>>([]);
   const [isTodoModalVisible, setIsTodoModalVisible] = useState<boolean>(false);
   const [newTodoTitle, setNewTodoTitle] = useState<string>('');
-  const [editingTodo, setEditingTodo] = useState<any>(null); // 수정할 Todo 저장
+  const [editingTodo, setEditingTodo] = useState<any>(null);
 
   // 할 일 목록 가져오기
   useEffect(() => {
@@ -30,20 +30,16 @@ const TodoList: React.FC = () => {
 
   const fetchTodos = async () => {
     try {
-      const response = await api<any>('get', '/todo/list', {
-        user_id: globalContext.user.user_id,
-      });
-
+      const response = await api<any>('get', '/todo/list', { user_id: globalContext.user.user_id });
       if (response.data) {
         const sortedTodos = response.data
           .map((task: any) => ({
             id: task.task_id.toString(),
             title: task.task_title,
-            isChecked: task.is_completed === 1,
+            isChecked: task.is_completed,
             taskOrder: task.task_order,
           }))
-          .sort((a: any, b: any) => a.taskOrder - b.taskOrder); // task_order 기준 정렬
-
+          .sort((a: any, b: any) => a.taskOrder - b.taskOrder);
         setTodos(sortedTodos);
       } else {
         Alert.alert('오류', '할 일 데이터를 가져오는 데 실패했습니다.');
@@ -62,10 +58,11 @@ const TodoList: React.FC = () => {
     }
 
     try {
-      await api('post', '/todo/insert', {
+      await api<any>('post', '/todo/insert', {}, {
         user_id: globalContext.user.user_id,
+        task_id: 0,
         task_title: newTodoTitle,
-        task_date: new Date().toISOString().split('T')[0], // 오늘 날짜
+        task_date: new Date().toISOString().split('T')[0],
       });
 
       Alert.alert('성공', '할 일이 추가되었습니다.');
@@ -78,33 +75,51 @@ const TodoList: React.FC = () => {
     }
   };
 
-  // 할 일 수정
-  const editTodo = async () => {
-    if (!editingTodo || editingTodo.title.trim() === '') {
-      Alert.alert('오류', '할 일을 입력해주세요.');
-      return;
-    }
+  // 할 일 완료 상태 토글
+ const toggleComplete = async (id: string, currentStatus: boolean) => {
+  console.log("Toggle Complete Clicked:", { id, currentStatus });
 
-    try {
-      await api('put', '/todo/update', {
-        user_id: globalContext.user.user_id,
-        task_id: editingTodo.id,
-        task_title: editingTodo.title,
-      });
+  // 즉각적인 UI 업데이트
+  setTodos(prevTodos =>
+    prevTodos.map(todo =>
+      todo.id === id ? { ...todo, isChecked: !currentStatus } : todo,
+    ),
+  );
 
-      Alert.alert('성공', '할 일이 수정되었습니다.');
-      setEditingTodo(null);
-      fetchTodos();
-    } catch (error) {
-      console.error(error);
-      Alert.alert('오류', '할 일을 수정하는 데 실패했습니다.');
-    }
-  };
+  try {
+    console.log("Sending API Request to /todo/completed with:", {
+      user_id: globalContext.user.user_id,
+      task_id: parseInt(id, 10),
+    });
+
+    const response = await api<any>('put', '/todo/completed', {
+      user_id: globalContext.user.user_id,
+      task_id: parseInt(id, 10),
+    });
+
+    console.log("API Response:", response);
+
+    // 성공적으로 완료된 경우 데이터를 다시 가져옵니다.
+    fetchTodos();
+  } catch (error) {
+    console.error('Error toggling completion:', error);
+
+    // 실패한 경우 원래 상태로 복구
+    setTodos(prevTodos =>
+      prevTodos.map(todo =>
+        todo.id === id ? { ...todo, isChecked: currentStatus } : todo,
+      ),
+    );
+
+    Alert.alert('오류', '완료 상태를 변경하는 데 실패했습니다.');
+  }
+};
+
 
   // 할 일 삭제
   const deleteTodo = async (id: string) => {
     try {
-      await api('delete', '/todo/delete', {
+      await api<any>('delete', '/todo/delete', {}, {
         user_id: globalContext.user.user_id,
         task_id: parseInt(id, 10),
       });
@@ -117,19 +132,27 @@ const TodoList: React.FC = () => {
     }
   };
 
-  // 할 일 완료 상태 토글
-  const toggleComplete = async (id: string) => {
+  // 할 일 수정
+  const editTodo = async () => {
+    if (!editingTodo || !editingTodo.title.trim()) {
+      Alert.alert('오류', '할 일을 입력해주세요.');
+      return;
+    }
+
     try {
-      await api('put', '/todo/completed', {
+      await api<any>('put', '/todo/update', {}, {
         user_id: globalContext.user.user_id,
-        task_id: parseInt(id, 10),
+        task_id: parseInt(editingTodo.id, 10),
+        task_title: editingTodo.title,
       });
 
-      Alert.alert('완료됨', '할 일이 완료되었습니다.');
+      Alert.alert('성공', '할 일이 수정되었습니다.');
+      setIsTodoModalVisible(false);
+      setEditingTodo(null);
       fetchTodos();
     } catch (error) {
       console.error(error);
-      Alert.alert('오류', '완료 상태를 변경하는 데 실패했습니다.');
+      Alert.alert('오류', '할 일을 수정하는 데 실패했습니다.');
     }
   };
 
@@ -139,7 +162,7 @@ const TodoList: React.FC = () => {
       <TodoItem
         title={item.title}
         isChecked={item.isChecked}
-        onCheck={() => !item.isChecked && toggleComplete(item.id)} // 완료 상태는 변경 불가
+        onCheck={() => toggleComplete(item.id, item.isChecked)}
         onDelete={() => deleteTodo(item.id)}
         onEdit={() => {
           if (!item.isChecked) {
@@ -150,9 +173,6 @@ const TodoList: React.FC = () => {
           }
         }}
       />
-      {item.isChecked && (
-        <Text style={styles.completedText}>완료된 항목 (수정 불가)</Text>
-      )}
     </View>
   );
 
@@ -308,12 +328,6 @@ const styles = StyleSheet.create({
     color: '#333',
     fontSize: fontSize(34),
     fontWeight: 'bold',
-  },
-  completedText: {
-    color: 'gray',
-    fontSize: fontSize(32),
-    marginTop: 5,
-    fontStyle: 'italic',
   },
 });
 

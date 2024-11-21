@@ -1,13 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  Alert,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  ActivityIndicator,
-} from 'react-native';
+import {View, Text, Alert, TouchableOpacity, StyleSheet, TextInput, ActivityIndicator} from 'react-native';
 import {useFormRef} from '../../common/hooks';
 import { globalContext } from '../../common/globalContext';
 import axios from 'axios';
