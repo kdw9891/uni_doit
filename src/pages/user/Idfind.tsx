@@ -8,25 +8,18 @@ import {
   TextInput,
   ActivityIndicator,
 } from 'react-native';
-import {useFormRef} from '../../common/hooks';
 import { globalContext } from '../../common/globalContext';
 import axios from 'axios';
 import { API_HOST } from '@env';
 import {ScreenProps} from '../../../App';
 import {Background} from '../../components/layout/Background';
-import api from '../../common/api';
 import {Item} from '../../components/common/DynamicIcon';
 import {palette} from '../../common/palette';
 
 const IdFind: React.FC<ScreenProps> = ({navigation}) => {
   const [email, setEmail] = useState<string>(''); // 이메일 입력 상태
   const [loading, setLoading] = useState<boolean>(false); // 로딩 상태
-  const [userId, setUserId] = useState<string | null>(null); // 결과로 받은 user_id
-
-  interface ApiResponse {
-    status: number;
-    user_id: string;
-  }
+  const [user_id, setuser_id] = useState<string | null>(null); // 결과로 받은 user_id
   
 
   useEffect(() => {
@@ -59,19 +52,24 @@ const IdFind: React.FC<ScreenProps> = ({navigation}) => {
       setLoading(true); // 로딩 시작
 
       console.log('전송된 데이터:', { email });
-      const url = `${API_HOST}/user/idfind`;
-       console.log('Request URL:', url);
 
+      const response = await axios.post('http://138.2.41.118:9005/doit/user/idfind', {email}, {
+        headers:{
+          "Content-Type":"application/json",
+        },
+      }
+    );
 
-      const response = await api<ApiResponse>('post', '${API_HOST}/user/idfind', email);
-
+    const { RSLT_CD, Result } = response.data;
       // 서버 응답 처리
-      if (response.status === 200 && response.data.user_id) {
-        setUserId(response.data.user_id);
-        Alert.alert('아이디 찾기 성공', `회원님의 아이디는 ${response.data.user_id}입니다.`);
+      if (response.status == 200 && Result && Result.length > 0) {
+        const userId = Result[0].user_id;
+        Alert.alert('아이디 찾기 성공', `회원님의 아이디는 ${userId}입니다.`);
       } else {
         Alert.alert('오류', '등록된 이메일이 없습니다.');
-        setUserId(null);
+        setuser_id(null);
+        console.log(response.data);
+        console.log(response.data.user_id);
       }
     } catch (error: any) {
       // 오류 정보 출력
@@ -121,8 +119,8 @@ const IdFind: React.FC<ScreenProps> = ({navigation}) => {
           <Text style={styles.buttonText}>아이디 찾기</Text>
         )}
       </TouchableOpacity>
-      {userId && (
-        <Text style={styles.resultText}>조회된 아이디: {userId}</Text>
+      {user_id && (
+        <Text style={styles.resultText}>조회된 아이디: {user_id}</Text>
       )}
     </View>
     </Background>
