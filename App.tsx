@@ -6,6 +6,7 @@ import Splash from './src/pages/user/Splash';
 import Login from './src/pages/user/Login';
 import Register from './src/pages/user/Register';
 import Idfind from './src/pages/user/Idfind';
+import Passfind from './src/pages/user/Passfind';
 import Home from './src/pages/home/Home';
 import Loading from './src/pages/Loading/Loading';
 import Store from './src/pages/store/Store';
@@ -41,6 +42,7 @@ function App(): React.JSX.Element {
     ScreenItem('Login', Login, 'Login', false),
     ScreenItem('Register', Register, 'Register', false),
     ScreenItem('Idfind', Idfind, 'Idfind', false),
+    ScreenItem('Passfind', Passfind, 'Passfind', false),
     ScreenItem('Loading', Loading, 'Loading', false),
     ScreenItem('Home', Home, 'Home', false),
     ScreenItem('Store', Store, 'Store', false),
