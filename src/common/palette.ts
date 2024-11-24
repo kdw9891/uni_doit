@@ -10,7 +10,6 @@ export interface Colors {
   black: string;
   white: string;
   darkBlue: string;
-  creamPink: string;
   skyBlue: string;
   whiteBlue: string;
   red: ColorPalette;
@@ -40,7 +39,6 @@ export const palette: Colors= {
   darkBlue: '#003664',
   skyBlue: '#2975A7',
   whiteBlue: '#59BCDE',
-  creamPink: '#FAC3C5',
   red: {
     '50': '#FFEBEE',
     '100': '#FFCDD2',

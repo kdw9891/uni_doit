@@ -68,17 +68,34 @@ const Register: React.FC<ScreenProps> = ({navigation}) => {
       const requestData =form['data']; 
       delete requestData.confirmPassword;
       
-      const data = await api('post', '/user/register',requestData);
-      console.log('Registration data:', data);
+      const data = await axios.post('http://138.2.41.118:9005/doit/user/register', 
+        {user_id:form['data'].user_id,
+          password:form['data'].password,
+          user_nickname:form['data'].user_nickname,
+          email:form['data'].email,
+        }, {
+        headers:{
+          "Content-Type":"application/json",
+        },
+      }
+    );
+    console.log(data.data);
+      
 
       if (data.status === 200) {
         Alert.alert('회원가입 성공', '환영합니다!');
         navigation.navigate('Login');
       }
-    } catch (error) {
-      console.error('Registration error:', error);
-      Alert.alert('회원가입 실패', '회원가입 중 오류가 발생했습니다.');
-      console.log('form', form['data']);
+    } catch (error: any) {
+      if (error.response) {
+        console.log('서버 응답:', error.response.data);
+        console.log('HTTP 상태 코드:', error.response.status);
+        console.log('Registration data:', form[0]);
+        Alert.alert('오류', error.response.data.message || '회원가입에 실패했습니다.');
+      } else {
+        console.error('네트워크 오류:', error.message);
+        Alert.alert('오류', '서버에 연결할 수 없습니다.');
+      }
     }
   };
 

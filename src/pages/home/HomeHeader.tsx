@@ -75,7 +75,7 @@ export const Header = ({
             alignItems: 'center',
             justifyContent: 'flex-end',
           }}>
-          {/* <TimerButton
+          <TimerButton
             iconType="MaterialIcons"
             iconName="settings"
             iconStyle={{marginRight: setWidth(18)}}
@@ -87,7 +87,7 @@ export const Header = ({
           />
           <InfoModal isVisible={isVisible} onClose={closeModal}>
             <Text>{'Info Modal'}</Text>
-          </InfoModal> */}
+          </InfoModal>
         </View>
       </View>
     </>

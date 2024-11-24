@@ -2,10 +2,11 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, StackNavigationProp} from '@react-navigation/stack';
 
-// import Splash from './src/pages/user/Splash';
+import Splash from './src/pages/user/Splash';
 import Login from './src/pages/user/Login';
 import Register from './src/pages/user/Register';
 import Idfind from './src/pages/user/Idfind';
+import Passfind from './src/pages/user/Passfind';
 import Home from './src/pages/home/Home';
 import Loading from './src/pages/Loading/Loading';
 import Store from './src/pages/store/Store';
@@ -37,10 +38,11 @@ const ScreenItem = (
 
 function App(): React.JSX.Element {
   const ScreenList: any[] = [
-    // ScreenItem('Splash', Splash, 'Splash', false),
+    ScreenItem('Splash', Splash, 'Splash', false),
     ScreenItem('Login', Login, 'Login', false),
     ScreenItem('Register', Register, 'Register', false),
     ScreenItem('Idfind', Idfind, 'Idfind', false),
+    ScreenItem('Passfind', Passfind, 'Passfind', false),
     ScreenItem('Loading', Loading, 'Loading', false),
     ScreenItem('Home', Home, 'Home', false),
     ScreenItem('Store', Store, 'Store', false),
@@ -51,7 +53,7 @@ function App(): React.JSX.Element {
   return (
     <>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator initialRouteName="Splash">
           {ScreenList.map((component: any, index: number) => {
             return (
               <React.Fragment key={`screenitem-${index}`}>
