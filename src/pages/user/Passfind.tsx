@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 10,
-    marginBottom: 15,
+    marginBottom: 20,
     backgroundColor: '#fff',
   },
   button: {
@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 8,
     alignItems: 'center',
+    marginTop: 15,
   },
   buttonText: {
     color: '#fff',
