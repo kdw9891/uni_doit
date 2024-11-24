@@ -2,7 +2,6 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, StackNavigationProp} from '@react-navigation/stack';
 
-import Splash from './src/pages/user/Splash';
 import Login from './src/pages/user/Login';
 import Register from './src/pages/user/Register';
 import Idfind from './src/pages/user/Idfind';
@@ -38,7 +37,6 @@ const ScreenItem = (
 
 function App(): React.JSX.Element {
   const ScreenList: any[] = [
-    ScreenItem('Splash', Splash, 'Splash', false),
     ScreenItem('Login', Login, 'Login', false),
     ScreenItem('Register', Register, 'Register', false),
     ScreenItem('Idfind', Idfind, 'Idfind', false),
@@ -53,7 +51,7 @@ function App(): React.JSX.Element {
   return (
     <>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Splash">
+        <Stack.Navigator initialRouteName="Home">
           {ScreenList.map((component: any, index: number) => {
             return (
               <React.Fragment key={`screenitem-${index}`}>
