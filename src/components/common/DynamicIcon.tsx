@@ -208,9 +208,18 @@ export const ImageItem: React.FC<{
         </View>
       </TouchableOpacity>
       {item.item_price ? (
-        <InfoModal isVisible={isVisible} onClose={closeModal}>
-          <Text>{'상점 정보'}</Text>
-        </InfoModal>
+        <ItemModal
+          isVisible={isVisible}
+          onClose={closeModal}
+          item={{
+            item_name: item.item_name,
+            item_rarity: item.item_rarity,
+            image_description: item.image_description,
+            image_url: item.image_url || '',
+          }}
+          buttonText={'구매'}
+          onConfirm={onConfirm}
+        />
       ) : (
         <ItemModal
           isVisible={isVisible}

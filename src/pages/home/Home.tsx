@@ -223,7 +223,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <Button
-            title={`테스트 모드: ${isTestMode ? 'ON' : 'OFF'}`}
+            title={`TEST MODE : ${isTestMode ? 'ON' : 'OFF'}`}
             onPress={() => setIsTestMode(!isTestMode)}
             color={isTestMode ? 'green' : 'gray'}
           />

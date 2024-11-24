@@ -11,6 +11,8 @@ import {Background} from '../../components/layout/Background';
 import {fontSize, fontStyle, setWidth} from '../../common/deviceUtils';
 import ScrollArea from '../../components/layout/ScrollArea';
 import api from '../../common/api';
+import {CoinHeader} from '../../components/common/CoinHeader';
+import {globalContext} from '../../common/globalContext';
 
 const Section: React.FC<{title: string; data: any[]}> = ({title, data}) => (
   <View style={{alignItems: 'center'}}>
@@ -45,6 +47,7 @@ const Section: React.FC<{title: string; data: any[]}> = ({title, data}) => (
 );
 
 const Store: React.FC<ScreenProps> = ({navigation}) => {
+  const [coin, setCoin] = useState(0);
   const {isVisible, openModal, closeModal} = useModal();
   const [categories, setCategories] = useState<
     {category_name: string; category_id: number; items: any[]}[]
@@ -52,13 +55,23 @@ const Store: React.FC<ScreenProps> = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    homeListhandler();
     categoryHandler();
   }, []);
+
+  const homeListhandler = async () => {
+    const result = await api<any>('get', '/home/list', {
+      user_id: globalContext.user.user_id,
+    });
+    const homeList = result.data;
+
+    setCoin(homeList[0].total_points);
+  };
 
   const categoryHandler = async () => {
     try {
       const result = await api<any>('get', '/store/category', {});
-      
+
       const categoryData = await Promise.all(
         result.data.map(async (cat: {category_name: string}) => {
           console.log(
@@ -91,7 +104,11 @@ const Store: React.FC<ScreenProps> = ({navigation}) => {
   if (isLoading) {
     return (
       <Background>
-        <ActivityIndicator size="large" color={palette.black} style={{flex: 1, justifyContent: 'center'}} />
+        <ActivityIndicator
+          size="large"
+          color={palette.black}
+          style={{flex: 1, justifyContent: 'center'}}
+        />
       </Background>
     );
   }
@@ -100,24 +117,15 @@ const Store: React.FC<ScreenProps> = ({navigation}) => {
     <Background>
       <View style={{flex: 10}}>
         <View style={{flex: 1}}>
-          <Header
+          <CoinHeader
             centerIconProps={{
               iconName: 'null',
               iconType: 'AntDesign',
               imagePath: require('../../assets/newimages/shophead.png'),
               size: setWidth(45),
             }}
-            rightIconProps={{
-              iconType: 'FontAwesome',
-              iconName: 'info',
-              color: palette.gray[600],
-              size: setWidth(30),
-              onPress: openModal,
-            }}
+            coin={coin}
           />
-          <InfoModal isVisible={isVisible} onClose={closeModal}>
-            <Text>{'상점 정보'}</Text>
-          </InfoModal>
         </View>
         <View style={{flex: 9}}>
           <ScrollArea>
