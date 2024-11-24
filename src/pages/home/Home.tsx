@@ -1,5 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import {Image, ImageBackground, View, Text, Alert, TouchableOpacity, Button, ActivityIndicator} from 'react-native';
+import {
+  Image,
+  ImageBackground,
+  View,
+  Text,
+  Alert,
+  TouchableOpacity,
+  Button,
+  ActivityIndicator,
+} from 'react-native';
 import {ScreenProps} from '../../../App';
 import {Header} from './HomeHeader';
 import {palette} from '../../common/palette';
@@ -10,7 +19,7 @@ import api from '../../common/api';
 import {globalContext} from '../../common/globalContext';
 import {API_HOST} from '@env';
 import axios from 'axios';
-import { toStorage } from '../../common/utility';
+import {toStorage} from '../../common/utility';
 
 const Home: React.FC<ScreenProps> = ({navigation}) => {
   const [percentage, setPercentage] = useState(0);
@@ -70,7 +79,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
 
     const homeList = result.data;
     toStorage(homeList[0]);
-    
+
     setPercentage(homeList[0].progress_percent);
     setCoin(homeList[0].total_points);
     setLevel(homeList[0].cat_level);
@@ -214,7 +223,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <Button
-            title={`TEST MODE : ${isTestMode ? 'ON' : 'OFF'}`}
+            title={`테스트 모드: ${isTestMode ? 'ON' : 'OFF'}`}
             onPress={() => setIsTestMode(!isTestMode)}
             color={isTestMode ? 'green' : 'gray'}
           />
@@ -222,12 +231,90 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
         <View
           style={{flex: 4.5, justifyContent: 'center', alignItems: 'center'}}>
           <Image
-            source={require('../../assets/images/cat_image.png')}
+            source={require('../../assets/newimages/러그.png')}
             style={{
-              marginTop: '30%',
-              width: 280,
+              width: 230,
+              resizeMode: 'contain',
+              position: 'absolute',
+              bottom: '15%',
+              left: '20%',
+              transform: [{translateY: 250}],
+            }}
+          />
+          <Image
+            source={require('../../assets/newimages/상자고양이.png')}
+            style={{
+              marginTop: '40%',
+              marginLeft: '10%',
+              width: 110,
               justifyContent: 'center',
               resizeMode: 'contain',
+            }}
+          />
+          <Image
+            source={require('../../assets/newimages/캣타워(분홍).png')}
+            style={{
+              width: 120,
+              resizeMode: 'contain',
+              position: 'absolute',
+              bottom: '16%',
+              left: '5%',
+              transform: [{translateY: 120}],
+            }}
+          />
+          <Image
+            source={require('../../assets/newimages/캣타워(파랑).png')}
+            style={{
+              width: 120,
+              resizeMode: 'contain',
+              position: 'absolute',
+              bottom: '10%',
+              left: '60%',
+              transform: [{translateY: 120}],
+            }}
+          />
+          <Image
+            source={require('../../assets/newimages/스크래쳐.png')}
+            style={{
+              width: 100,
+              resizeMode: 'contain',
+              position: 'absolute',
+              bottom: '10%',
+              left: '1%',
+              transform: [{translateY: 170}],
+            }}
+          />
+          <Image
+            source={require('../../assets/newimages/사료.png')}
+            style={{
+              width: 70,
+              resizeMode: 'contain',
+              position: 'absolute',
+              bottom: '10%',
+              left: '80%',
+              transform: [{translateY: 170}],
+            }}
+          />
+          <Image
+            source={require('../../assets/newimages/화분.png')}
+            style={{
+              width: 40,
+              resizeMode: 'contain',
+              position: 'absolute',
+              bottom: '8%',
+              left: '84%',
+              transform: [{translateY: 240}],
+            }}
+          />
+          <Image
+            source={require('../../assets/newimages/털실.png')}
+            style={{
+              width: 50,
+              resizeMode: 'contain',
+              position: 'absolute',
+              bottom: '8%',
+              left: '30%',
+              transform: [{translateY: 240}],
             }}
           />
         </View>
@@ -265,15 +352,13 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
                     justifyContent: 'center',
                     height: setHeight(12),
                     borderWidth: 2,
-                    borderRadius: 10,
-                    borderColor: palette.gray[400],
+                    borderColor: palette.gray[300],
                   }}>
                   <View
                     style={{
                       width: `${percentage}%`,
                       height: setHeight(8.5),
-                      borderRadius: 10,
-                      backgroundColor: palette.red[500],
+                      backgroundColor: palette.red[300],
                     }}
                   />
                 </View>

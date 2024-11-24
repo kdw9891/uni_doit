@@ -1,13 +1,5 @@
 import React, {useEffect} from 'react';
-import {
-  View,
-  Text,
-  Alert,
-  Button,
-  StyleSheet,
-  TouchableOpacity,
-  Image
-} from 'react-native';
+import {View, Text, Alert, StyleSheet, TouchableOpacity, Image, TouchableWithoutFeedback} from 'react-native';
 import {ScreenProps} from '../../../App';
 import api from '../../common/api';
 import Input from '../../components/common/Input';
@@ -16,7 +8,6 @@ import {globalContext} from '../../common/globalContext';
 import axios from 'axios';
 import {API_HOST} from '@env';
 import {isNullOrWhitespace} from '../../common/utility';
-import {Background} from '../../components/layout/Background';
 
 const Login: React.FC<ScreenProps> = ({navigation}) => {
   const [form, setForm] = useFormRef();
@@ -54,71 +45,71 @@ const Login: React.FC<ScreenProps> = ({navigation}) => {
   };
 
   return (
-    <Background>
-    <View style={styles.container}>
-    <Image
+    <>
+      <TouchableWithoutFeedback>
+        <View style={styles.container}>
+          <Image
             source={require('../../assets/images/doit_logo.png')}
             style={styles.logo}
           />
-      <Input
-        style={styles.input}
-        name="user_id"
-        placeholder="아이디"
-        form={form}
-        required={true}
-        keyboardType="ascii-capable"
-        autoCapitalize="none"
-      />
+          <Input
+            style={styles.input}
+            name="user_id"
+            placeholder="아이디"
+            form={form}
+            required={true}
+            keyboardType="ascii-capable"
+            autoCapitalize="none"
+          />
 
-      <Input
-        style={styles.input}
-        name="password"
-        placeholder="비밀번호"
-        form={form}
-        required={true}
-        secureTextEntry={true}
-        keyboardType="ascii-capable"
-        autoCapitalize="none"
-      />
+          <Input
+            style={styles.input}
+            name="password"
+            placeholder="비밀번호"
+            form={form}
+            required={true}
+            secureTextEntry={true}
+            keyboardType="ascii-capable"
+            autoCapitalize="none"
+          />
 
-      <TouchableOpacity style={styles.loginButton} onPress={login}>
-        <Text style={styles.loginButtonText}>로그인</Text>
-      </TouchableOpacity>
+          <TouchableOpacity style={styles.loginButton} onPress={login}>
+            <Text style={styles.loginButtonText}>로그인</Text>
+          </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.registerButton}
-        onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.registerButtonText}>회원가입</Text>
-      </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.registerButton}
+            onPress={() => navigation.navigate('Register')}>
+            <Text style={styles.registerButtonText}>회원가입</Text>
+          </TouchableOpacity>
 
-      <View style={styles.linkContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Idfind')}>
-          <Text style={styles.linkText}>아이디 찾기</Text>
-        </TouchableOpacity>
-        <Text style={styles.separator}>|</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Passfind')}>
-          <Text style={styles.linkText}>비밀번호 찾기</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-    </Background>
+          <View style={styles.linkContainer}>
+            <TouchableOpacity onPress={() => navigation.navigate('Idfind')}>
+              <Text style={styles.linkText}>아이디 찾기</Text>
+            </TouchableOpacity>
+            <Text style={styles.separator}>|</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Passfind')}>
+              <Text style={styles.linkText}>비밀번호 찾기</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 30,
-    backgroundColor: '#f5f7fa',
   },
-  logo:{
-    height:'20%',
+  logo: {
+    height: '20%',
     width: '60%',
     justifyContent: 'center',
     resizeMode: 'contain',
-    marginBottom:30,
+    marginBottom: 30,
   },
   input: {
     width: '100%',

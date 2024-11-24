@@ -51,7 +51,7 @@ function App(): React.JSX.Element {
   return (
     <>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="Login">
           {ScreenList.map((component: any, index: number) => {
             return (
               <React.Fragment key={`screenitem-${index}`}>
