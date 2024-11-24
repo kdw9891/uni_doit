@@ -34,12 +34,14 @@ const TodoList: React.FC = () => {
         user_id: globalContext.user.user_id,
       });
 
+      console.log('Todo list:', response.data);
+
       if (response.data) {
         const sortedTodos = response.data
           .map((task: any) => ({
             id: task.task_id.toString(),
             title: task.task_title,
-            isChecked: task.is_completed === 1,
+            isChecked: task.is_completed == 1,
             taskOrder: task.task_order,
           }))
           .sort((a: any, b: any) => a.taskOrder - b.taskOrder); // task_order 기준 정렬
@@ -62,19 +64,19 @@ const TodoList: React.FC = () => {
     }
 
     try {
-      await api('post', '/todo/insert', {
+      await api('post', '/todo/insert', undefined, {
         user_id: globalContext.user.user_id,
         task_title: newTodoTitle,
-        task_date: new Date().toISOString().split('T')[0], // 오늘 날짜
       });
 
       Alert.alert('성공', '할 일이 추가되었습니다.');
-      setNewTodoTitle('');
-      setIsTodoModalVisible(false);
-      fetchTodos();
     } catch (error) {
       console.error(error);
       Alert.alert('오류', '할 일을 추가하는 데 실패했습니다.');
+    } finally {
+      setNewTodoTitle(''); // 항상 입력 초기화
+      setIsTodoModalVisible(false); // 항상 팝업 닫기
+      fetchTodos(); // 목록 새로고침
     }
   };
 
@@ -86,25 +88,27 @@ const TodoList: React.FC = () => {
     }
 
     try {
-      await api('put', '/todo/update', {
+      await api('put', '/todo/update', undefined, {
         user_id: globalContext.user.user_id,
         task_id: editingTodo.id,
         task_title: editingTodo.title,
       });
 
       Alert.alert('성공', '할 일이 수정되었습니다.');
-      setEditingTodo(null);
-      fetchTodos();
     } catch (error) {
       console.error(error);
       Alert.alert('오류', '할 일을 수정하는 데 실패했습니다.');
+    } finally {
+      setIsTodoModalVisible(false); // 항상 팝업 닫기
+      setEditingTodo(null); // 항상 상태 초기화
+      fetchTodos(); // 목록 새로고침
     }
   };
 
   // 할 일 삭제
   const deleteTodo = async (id: string) => {
     try {
-      await api('delete', '/todo/delete', {
+      await api('delete', '/todo/delete', undefined, {
         user_id: globalContext.user.user_id,
         task_id: parseInt(id, 10),
       });
@@ -171,6 +175,15 @@ const TodoList: React.FC = () => {
             imagePath: require('../../assets/newimages/todohead.png'),
             size: setWidth(45),
           }}
+          rightIconProps={{
+            iconName: 'plus',
+            iconType: 'Entypo',
+            onPress: () => {
+              setNewTodoTitle('');
+              setEditingTodo(null);
+              setIsTodoModalVisible(true);
+            },
+          }}
         />
       </View>
       <View style={{flex: 9, width: '100%'}}>
@@ -188,15 +201,6 @@ const TodoList: React.FC = () => {
           }
         />
       </View>
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => {
-          setNewTodoTitle('');
-          setEditingTodo(null);
-          setIsTodoModalVisible(true);
-        }}>
-        <AntDesign name="plus" size={setWidth(20)} color={palette.white} />
-      </TouchableOpacity>
       <Modal
         animationType="fade"
         transparent={true}
@@ -245,17 +249,6 @@ const styles = StyleSheet.create({
   emptyListText: {
     fontSize: 18,
     color: palette.gray[600],
-  },
-  addButton: {
-    position: 'absolute',
-    right: setWidth(20),
-    bottom: setHeight(20),
-    width: setWidth(45),
-    height: setHeight(45),
-    backgroundColor: palette.blue[600],
-    borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   modalOverlay: {
     flex: 1,

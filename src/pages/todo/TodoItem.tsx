@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
-import { setWidth } from '../../common/deviceUtils';
-import { palette } from '../../common/palette';
+import {setWidth} from '../../common/deviceUtils';
+import {palette} from '../../common/palette';
 
 interface TodoItemProps {
   title: string;
@@ -14,23 +14,52 @@ interface TodoItemProps {
   onDelete: () => void; // 삭제 이벤트
 }
 
-const TodoItem: React.FC<TodoItemProps> = ({ title, isChecked, onCheck, onEdit, onDelete }) => {
+const TodoItem: React.FC<TodoItemProps> = ({
+  title,
+  isChecked,
+  onCheck,
+  onEdit,
+  onDelete,
+}) => {
+  console.log('TodoItem 렌더링:', {title, isChecked}); // 확인 코드
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onCheck} style={styles.checkButton}>
+      <TouchableOpacity
+        onPress={() => {
+          console.log('onCheck 실행됨'); // 확인 코드
+          onCheck();
+        }}
+        style={styles.checkButton}>
         <FontAwesome
           name={isChecked ? 'check-square' : 'square-o'}
           size={setWidth(15)}
           color={palette.black}
         />
       </TouchableOpacity>
-      <Text style={[styles.title, isChecked && styles.checkedTitle]}>{title}</Text>
+      <Text style={[styles.title, isChecked && styles.checkedTitle]}>
+        {title}
+      </Text>
       <View style={styles.icons}>
-        <TouchableOpacity onPress={onEdit} style={styles.iconButton}>
-          <Ionicons name="pencil" size={setWidth(15)} color={palette.black} />
+        <TouchableOpacity
+          onPress={() => {
+            console.log('onEdit 실행됨'); // 확인 코드
+            onEdit();
+          }}
+          style={styles.iconButton}>
+          <Ionicons
+            name="pencil"
+            size={setWidth(15)}
+            color={palette.blue[300]}
+          />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onDelete} style={styles.iconButton}>
-          <Feather name="trash" size={setWidth(15)} color={palette.black} />
+        <TouchableOpacity
+          onPress={() => {
+            console.log('onDelete 실행됨'); // 확인 코드
+            onDelete();
+          }}
+          style={styles.iconButton}>
+          <Feather name="trash" size={setWidth(15)} color={palette.red[400]} />
         </TouchableOpacity>
       </View>
     </View>

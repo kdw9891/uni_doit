@@ -13,7 +13,7 @@ import {ScreenProps} from '../../../App';
 import {Header} from './HomeHeader';
 import {palette} from '../../common/palette';
 import HomeMenuData from './HomeMenuData';
-import {fontSize, fontStyle, setHeight} from '../../common/deviceUtils';
+import {fontSize, fontStyle, setHeight, setWidth} from '../../common/deviceUtils';
 import ImageIcon from '../../components/common/ImageIcon';
 import api from '../../common/api';
 import {globalContext} from '../../common/globalContext';
@@ -186,6 +186,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
               width: '60%',
               justifyContent: 'space-evenly',
               alignItems: 'center',
+              zIndex: 1,
             }}>
             <TouchableOpacity onPress={resetTimer}>
               <Image
@@ -222,39 +223,36 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
               />
             </TouchableOpacity>
           </View>
-          <Button
-            title={`테스트 모드: ${isTestMode ? 'ON' : 'OFF'}`}
-            onPress={() => setIsTestMode(!isTestMode)}
-            color={isTestMode ? 'green' : 'gray'}
-          />
         </View>
         <View
           style={{flex: 4.5, justifyContent: 'center', alignItems: 'center'}}>
           <Image
             source={require('../../assets/newimages/러그.png')}
             style={{
-              width: 230,
+              width: setWidth(200),
               resizeMode: 'contain',
               position: 'absolute',
               bottom: '15%',
               left: '20%',
-              transform: [{translateY: 250}],
+              transform: [{translateY: setWidth(210)}],
+              zIndex: 0,
             }}
           />
           <Image
             source={require('../../assets/newimages/상자고양이.png')}
             style={{
+              width: setWidth(100),
               marginTop: '40%',
               marginLeft: '10%',
-              width: 110,
               justifyContent: 'center',
               resizeMode: 'contain',
+              zIndex: 1,
             }}
           />
           <Image
             source={require('../../assets/newimages/캣타워(분홍).png')}
             style={{
-              width: 120,
+              width: setWidth(100),
               resizeMode: 'contain',
               position: 'absolute',
               bottom: '16%',
@@ -265,7 +263,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
           <Image
             source={require('../../assets/newimages/캣타워(파랑).png')}
             style={{
-              width: 120,
+              width: setWidth(100),
               resizeMode: 'contain',
               position: 'absolute',
               bottom: '10%',
@@ -276,7 +274,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
           <Image
             source={require('../../assets/newimages/스크래쳐.png')}
             style={{
-              width: 100,
+              width: setWidth(70),
               resizeMode: 'contain',
               position: 'absolute',
               bottom: '10%',
@@ -287,7 +285,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
           <Image
             source={require('../../assets/newimages/사료.png')}
             style={{
-              width: 70,
+              width: setWidth(50),
               resizeMode: 'contain',
               position: 'absolute',
               bottom: '10%',
@@ -298,7 +296,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
           <Image
             source={require('../../assets/newimages/화분.png')}
             style={{
-              width: 40,
+              width: setWidth(30),
               resizeMode: 'contain',
               position: 'absolute',
               bottom: '8%',
@@ -309,7 +307,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
           <Image
             source={require('../../assets/newimages/털실.png')}
             style={{
-              width: 50,
+              width: setWidth(40),
               resizeMode: 'contain',
               position: 'absolute',
               bottom: '8%',
@@ -326,6 +324,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
             alignItems: 'center',
             flexDirection: 'row',
             backgroundColor: palette.gray[200],
+            zIndex: 1,
           }}>
           <View
             style={{

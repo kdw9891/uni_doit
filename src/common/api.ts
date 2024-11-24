@@ -1,6 +1,17 @@
-import axios, { AxiosResponseHeaders, InternalAxiosRequestConfig, RawAxiosResponseHeaders } from 'axios';
+import axios, {
+  AxiosResponseHeaders,
+  InternalAxiosRequestConfig,
+  RawAxiosResponseHeaders,
+} from 'axios';
 
-export type HttpMethod = "get" | "put" | "post" | "delete" | "upload" | "download" | "downpost";
+export type HttpMethod =
+  | 'get'
+  | 'put'
+  | 'post'
+  | 'delete'
+  | 'upload'
+  | 'download'
+  | 'downpost';
 
 export interface UniResponse<T = any, D = any> {
   data: T;
@@ -11,43 +22,57 @@ export interface UniResponse<T = any, D = any> {
   request?: any;
 }
 
-const api: <T>(method: HttpMethod, url: string, params?: {} | [] | FormData) =>
-  Promise<UniResponse<T, any>> = async (method, url, params) => {
-  if (!url.startsWith("/doit")) {
-    url = `/doit${!url.startsWith("/") ? "/" + url : url}`;
+const api = async <T>(
+  method: HttpMethod,
+  url: string,
+  params?: Record<string, any>,
+  body?: Record<string, any> | FormData,
+): Promise<UniResponse<T, any>> => {
+  if (!url.startsWith('/doit')) {
+    url = `/doit${!url.startsWith('/') ? '/' + url : url}`;
   }
 
-  const response = await (async () => {
-    switch (method) {
-      case "get":
-        return axios.get(url, { params });
-      case "put":
-        return axios.put(url, params);
-      case "post":
-        if (params && typeof params === 'object' && !Array.isArray(params) && !(params instanceof FormData)) {
-          return axios.post(url, null, { params });
-        } else {
-          return axios.post(url, params);
-        }
-      case "delete":
-        return axios.delete(url, { data: params });
-      case "upload":
-        const uploadHeaders = { "Content-Type": "multipart/form-data" };
-        return axios.put(url, params, { headers: uploadHeaders });
-      case "download":
-        return axios.get(url, { params, responseType: "blob" });
-      case "downpost":
-        return axios.post(url, params, { responseType: "blob" });
-      default:
-        throw new Error("Unsupported HTTP method");
+  try {
+    const config: Record<string, any> = {};
+
+    // GET 요청에서 params는 URL 쿼리 스트링으로 전달
+    if (method === 'get' || method === 'download') {
+      config.params = params;
     }
-  })();
-  
-  const data = response.data;
-  return {
-    ...response,
-    data: data.Result && Array.isArray(data.Result) ? data.Result : data,
-  };
+
+    // POST, PUT, DELETE, UPLOAD, DOWNPOST에서 params는 쿼리 스트링으로 전달
+    if (method !== 'get') {
+      if (params) {
+        config.params = params; // 쿼리 스트링
+      }
+      if (body) {
+        config.data = body; // 요청 본문
+      }
+    }
+
+    // 업로드의 경우 헤더에 Content-Type 추가
+    if (method === 'upload' || body instanceof FormData) {
+      config.headers = {
+        'Content-Type': 'multipart/form-data',
+      };
+    }
+
+    // 다운로드의 경우 responseType 설정
+    if (method === 'download' || method === 'downpost') {
+      config.responseType = 'blob';
+    }
+
+    const response = await axios({method, url, ...config});
+    const data = response.data;
+
+    return {
+      ...response,
+      data: data.Result && Array.isArray(data.Result) ? data.Result : data,
+    };
+  } catch (error) {
+    console.error('API 호출 중 에러 발생:', error);
+    throw error;
+  }
 };
 
 export default api;
