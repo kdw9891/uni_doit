@@ -1,42 +1,33 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  Modal,
-  TextInput,
-  Alert,
-} from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import {Text, View, StyleSheet, FlatList, TouchableOpacity, Modal, TextInput, Alert} from 'react-native';
 import {Header} from '../../components/common/Header';
 import {palette} from '../../common/palette';
-import {setWidth, setHeight, fontSize} from '../../common/deviceUtils';
+import {setWidth, fontSize} from '../../common/deviceUtils';
 import TodoItem from './TodoItem';
 import api from '../../common/api';
 import {globalContext} from '../../common/globalContext';
+import moment from 'moment';
 
 const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Array<any>>([]);
   const [isTodoModalVisible, setIsTodoModalVisible] = useState<boolean>(false);
   const [newTodoTitle, setNewTodoTitle] = useState<string>('');
-  const [editingTodo, setEditingTodo] = useState<any>(null); // 수정할 Todo 저장
+  const [editingTodo, setEditingTodo] = useState<any>(null);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   // 할 일 목록 가져오기
   useEffect(() => {
     fetchTodos();
-  }, []);
+  }, [selectedDate]);
 
   const fetchTodos = async () => {
     try {
       const response = await api<any>('get', '/todo/list', {
         user_id: globalContext.user.user_id,
+        task_date: moment(selectedDate).format('YYYY-MM-DD'),
       });
 
-      console.log('Todo list:', response.data);
-
-      if (response.data) {
+      if (response.data && response.data.length > 0) {
         const sortedTodos = response.data
           .map((task: any) => ({
             id: task.task_id.toString(),
@@ -44,15 +35,15 @@ const TodoList: React.FC = () => {
             isChecked: task.is_completed == 1,
             taskOrder: task.task_order,
           }))
-          .sort((a: any, b: any) => a.taskOrder - b.taskOrder); // task_order 기준 정렬
+          .sort((a: any, b: any) => a.taskOrder - b.taskOrder);
 
         setTodos(sortedTodos);
       } else {
-        Alert.alert('오류', '할 일 데이터를 가져오는 데 실패했습니다.');
+        setTodos([]);
       }
     } catch (error) {
       console.error(error);
-      Alert.alert('오류', 'API 호출 중 문제가 발생했습니다.');
+      Alert.alert('오류', '할 일 데이터를 가져오는 데 실패했습니다.');
     }
   };
 
@@ -67,9 +58,9 @@ const TodoList: React.FC = () => {
       await api('post', '/todo/insert', undefined, {
         user_id: globalContext.user.user_id,
         task_title: newTodoTitle,
+        task_date: moment(selectedDate).format('YYYY-MM-DD'),
       });
 
-      Alert.alert('성공', '할 일이 추가되었습니다.');
     } catch (error) {
       console.error(error);
       Alert.alert('오류', '할 일을 추가하는 데 실패했습니다.');
@@ -94,7 +85,6 @@ const TodoList: React.FC = () => {
         task_title: editingTodo.title,
       });
 
-      Alert.alert('성공', '할 일이 수정되었습니다.');
     } catch (error) {
       console.error(error);
       Alert.alert('오류', '할 일을 수정하는 데 실패했습니다.');
@@ -129,7 +119,6 @@ const TodoList: React.FC = () => {
         task_id: parseInt(id, 10),
       });
 
-      Alert.alert('완료됨', '할 일이 완료되었습니다.');
       fetchTodos();
     } catch (error) {
       console.error(error);
@@ -143,7 +132,7 @@ const TodoList: React.FC = () => {
       <TodoItem
         title={item.title}
         isChecked={item.isChecked}
-        onCheck={() => !item.isChecked && toggleComplete(item.id)} // 완료 상태는 변경 불가
+        onCheck={() => !item.isChecked && toggleComplete(item.id)}
         onDelete={() => deleteTodo(item.id)}
         onEdit={() => {
           if (!item.isChecked) {
@@ -154,9 +143,9 @@ const TodoList: React.FC = () => {
           }
         }}
       />
-      {item.isChecked && (
+      {/* {item.isChecked && (
         <Text style={styles.completedText}>완료된 항목 (수정 불가)</Text>
-      )}
+      )} */}
     </View>
   );
 

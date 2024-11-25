@@ -136,6 +136,7 @@ export const ImageItem: React.FC<{
     item_name: string;
     item_rarity: string;
     image_description: string;
+    item_id?: number;
   };
   onConfirm: () => void;
 }> = ({
@@ -218,7 +219,10 @@ export const ImageItem: React.FC<{
             image_url: item.image_url || '',
           }}
           buttonText={'구매'}
-          onConfirm={onConfirm}
+          onConfirm={() => {
+            onConfirm();
+            closeModal(); // 모달 닫기
+          }}
         />
       ) : (
         <ItemModal
@@ -231,7 +235,10 @@ export const ImageItem: React.FC<{
             image_url: item.image_url || '',
           }}
           buttonText={'사용'}
-          onConfirm={onConfirm}
+          onConfirm={() => {
+            onConfirm();
+            closeModal(); // 모달 닫기
+          }}
         />
       )}
     </View>
@@ -250,6 +257,7 @@ export const renderImageItem = ({item}: {item: any}) => (
       item_name: item.item_name,
       item_rarity: item.item_rarity,
       image_description: item.item_description,
+      item_id: item.item_id,
     }}
     onConfirm={() => console.log('구매 또는 사용')}
   />

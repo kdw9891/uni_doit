@@ -20,6 +20,7 @@ import {globalContext} from '../../common/globalContext';
 import {API_HOST} from '@env';
 import axios from 'axios';
 import {toStorage} from '../../common/utility';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Home: React.FC<ScreenProps> = ({navigation}) => {
   const [percentage, setPercentage] = useState(0);
@@ -46,6 +47,8 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
     const initialize = async () => {
       globalContext.navigation = navigation;
       axios.defaults.baseURL = API_HOST;
+
+      console.log(API_HOST)
 
       await loginhandler();
       await homeListhandler();
