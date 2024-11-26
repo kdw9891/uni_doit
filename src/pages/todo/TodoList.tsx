@@ -265,6 +265,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 15,
+    color: palette.black,
   },
   modalButton: {
     flex: 1,

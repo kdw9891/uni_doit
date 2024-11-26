@@ -37,7 +37,6 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
   const [catImage, setCatImage] = useState(
     require('../../assets/newimages/상자고양이.png'),
   ); // 기본 고양이 이미지
-  const [isOutfitEquipped, setIsOutfitEquipped] = useState(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
