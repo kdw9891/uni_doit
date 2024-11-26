@@ -6,21 +6,25 @@ import {
   Text,
   Alert,
   TouchableOpacity,
-  Button,
   ActivityIndicator,
 } from 'react-native';
 import {ScreenProps} from '../../../App';
 import {Header} from './HomeHeader';
 import {palette} from '../../common/palette';
-import HomeMenuData from './HomeMenuData';
-import {fontSize, fontStyle, setHeight, setWidth} from '../../common/deviceUtils';
+import HomeMenuData from './HomeMenuData'; // 유지
+import {
+  fontSize,
+  fontStyle,
+  setHeight,
+  setWidth,
+} from '../../common/deviceUtils';
 import ImageIcon from '../../components/common/ImageIcon';
 import api from '../../common/api';
 import {globalContext} from '../../common/globalContext';
 import {API_HOST} from '@env';
 import axios from 'axios';
 import {toStorage} from '../../common/utility';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Home: React.FC<ScreenProps> = ({navigation}) => {
   const [percentage, setPercentage] = useState(0);
@@ -28,8 +32,12 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
   const [level, setLevel] = useState(0);
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [isTestMode, setIsTestMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [equippedItems, setEquippedItems] = useState<number[]>([]);
+  const [catImage, setCatImage] = useState(
+    require('../../assets/newimages/상자고양이.png'),
+  ); // 기본 고양이 이미지
+  const [isOutfitEquipped, setIsOutfitEquipped] = useState(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -48,76 +56,126 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
       globalContext.navigation = navigation;
       axios.defaults.baseURL = API_HOST;
 
-      console.log(API_HOST)
+      console.log(API_HOST);
 
       await loginhandler();
       await homeListhandler();
+      await fetchEquippedItems();
+      await fetchEquippedOutfit();
 
-      setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 종료
+      setIsLoading(false);
     };
 
     initialize();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const initialize = async () => {
+        axios.defaults.baseURL = API_HOST;
+
+        console.log(API_HOST);
+
+        await loginhandler();
+        await homeListhandler();
+        await fetchEquippedItems();
+        await fetchEquippedOutfit();
+
+        setIsLoading(false);
+      };
+
+      initialize();
+
+      return () => {
+        // 필요하다면 화면 언포커스 시 수행할 작업 작성
+        console.log('Home screen unfocused');
+      };
+    }, []),
+  );
 
   const loginhandler = async () => {
     const result = await api<any>('get', '/user/login', {
       user_id: 'admin',
       password: 'admin',
     });
-    const user = result.data;
-    toStorage(user);
-
-    globalContext.user = user;
+    globalContext.user = result.data;
   };
 
   const homeListhandler = async () => {
-    if (!globalContext.user) {
-      console.error('User not logged in');
-      return;
-    }
-
     const result = await api<any>('get', '/home/list', {
       user_id: globalContext.user.user_id,
     });
 
-    const homeList = result.data;
-    toStorage(homeList[0]);
-
-    setPercentage(homeList[0].progress_percent);
-    setCoin(homeList[0].total_points);
-    setLevel(homeList[0].cat_level);
+    const homeList = result.data[0];
+    setPercentage(homeList.progress_percent);
+    setCoin(homeList.total_points);
+    setLevel(homeList.cat_level);
   };
 
-  const sendStudyTimeToServer = async (studyTime: number) => {
-    if (globalContext.user && globalContext.user.user_id) {
-      try {
-        console.log(
-          'Sending study time with user_id:',
-          globalContext.user.user_id,
-          'and study_time:',
-          studyTime,
-        );
-        const result = await api('post', '/home/timer', {
+  const fetchEquippedItems = async () => {
+    try {
+      const response = await api<any>(
+        'get',
+        '/home/fielditemlist',
+        {
           user_id: globalContext.user.user_id,
-          study_time: studyTime,
-        });
-        homeListhandler();
-        console.log('Study time sent successfully:', result);
-      } catch (error: any) {
-        console.error(
-          'Failed to send study time:',
-          error?.response?.data || error.message,
-        );
+        },
+        undefined,
+      );
+
+      if (response.data && response.data.length > 0) {
+        setEquippedItems(response.data.map((item: any) => item.item_id)); // 장착된 아이템 ID 목록
+      } else {
+        console.log('No equipped items found for the user.');
+        setEquippedItems([]); // 장착된 아이템 ID 목록을 초기화
       }
-    } else {
-      console.error('User ID is missing or not set in globalContext.');
+    } catch (error) {
+      console.error('Failed to fetch equipped items:', error);
+    }
+  };
+
+  const fetchEquippedOutfit = async () => {
+    try {
+      const response = await api<any>(
+        'get',
+        '/home/catequiplist',
+        {user_id: globalContext.user?.user_id},
+        undefined,
+      );
+      if (response.data && response.data.length > 0) {
+        const outfitId = response.data[0]?.item_id;
+        switch (outfitId) {
+          case 6:
+            setCatImage(require('../../assets/newimages/유치원복.png'));
+            break;
+          case 7:
+            setCatImage(require('../../assets/newimages/개구리우비.png'));
+            break;
+          case 8:
+            setCatImage(require('../../assets/newimages/할로윈의상.png'));
+            break;
+          case 9:
+            setCatImage(require('../../assets/newimages/산타.png'));
+            break;
+          case 10:
+            setCatImage(require('../../assets/newimages/잠옷.png'));
+            break;
+          default:
+            setCatImage(require('../../assets/newimages/상자고양이.png'));
+        }
+      } else {
+        console.log('No equipped outfits found.');
+        setCatImage(require('../../assets/newimages/상자고양이.png'));
+      }
+    } catch (error) {
+      console.error('Failed to fetch equipped outfit:', error);
     }
   };
 
   const resetTimer = () => {
     if (isRunning || timer > 0) {
       setIsRunning(false);
-      const studyTime = isTestMode ? 50 : Math.floor(timer / 60);
+      const studyTime = Math.floor(timer / 60);
       Alert.alert(
         '공부를 멈출꺼냥?',
         `현재 타이머가 멈췄다. 지금까지 ${studyTime}분 공부 중입니다. 시간 초기화할꺼냥?`,
@@ -131,9 +189,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
           },
           {
             text: '네',
-            onPress: async () => {
-              await sendStudyTimeToServer(studyTime);
-              console.log(`총 공부 시간: ${studyTime}분`);
+            onPress: () => {
               setTimer(0);
             },
           },
@@ -230,19 +286,11 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
         <View
           style={{flex: 4.5, justifyContent: 'center', alignItems: 'center'}}>
           <Image
-            source={require('../../assets/newimages/러그.png')}
-            style={{
-              width: setWidth(200),
-              resizeMode: 'contain',
-              position: 'absolute',
-              bottom: '15%',
-              left: '20%',
-              transform: [{translateY: setWidth(210)}],
-              zIndex: 0,
-            }}
-          />
-          <Image
-            source={require('../../assets/newimages/상자고양이.png')}
+            source={
+              isRunning
+                ? require('../../assets/newimages/공부중.png')
+                : catImage
+            }
             style={{
               width: setWidth(100),
               marginTop: '40%',
@@ -252,73 +300,114 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
               zIndex: 1,
             }}
           />
-          <Image
-            source={require('../../assets/newimages/캣타워(분홍).png')}
-            style={{
-              width: setWidth(100),
-              resizeMode: 'contain',
-              position: 'absolute',
-              bottom: '16%',
-              left: '5%',
-              transform: [{translateY: 120}],
-            }}
-          />
-          <Image
-            source={require('../../assets/newimages/캣타워(파랑).png')}
-            style={{
-              width: setWidth(100),
-              resizeMode: 'contain',
-              position: 'absolute',
-              bottom: '10%',
-              left: '60%',
-              transform: [{translateY: 120}],
-            }}
-          />
-          <Image
-            source={require('../../assets/newimages/스크래쳐.png')}
-            style={{
-              width: setWidth(70),
-              resizeMode: 'contain',
-              position: 'absolute',
-              bottom: '10%',
-              left: '1%',
-              transform: [{translateY: 170}],
-            }}
-          />
-          <Image
-            source={require('../../assets/newimages/사료.png')}
-            style={{
-              width: setWidth(50),
-              resizeMode: 'contain',
-              position: 'absolute',
-              bottom: '10%',
-              left: '80%',
-              transform: [{translateY: 170}],
-            }}
-          />
-          <Image
-            source={require('../../assets/newimages/화분.png')}
-            style={{
-              width: setWidth(30),
-              resizeMode: 'contain',
-              position: 'absolute',
-              bottom: '8%',
-              left: '84%',
-              transform: [{translateY: 240}],
-            }}
-          />
-          <Image
-            source={require('../../assets/newimages/털실.png')}
-            style={{
-              width: setWidth(40),
-              resizeMode: 'contain',
-              position: 'absolute',
-              bottom: '8%',
-              left: '30%',
-              transform: [{translateY: 240}],
-            }}
-          />
+          {equippedItems.includes(27) && (
+            <Image
+              source={require('../../assets/newimages/러그.png')}
+              style={{
+                width: setWidth(200),
+                resizeMode: 'contain',
+                position: 'absolute',
+                bottom: '15%',
+                left: '20%',
+                transform: [{translateY: setWidth(210)}],
+                zIndex: 0,
+              }}
+            />
+          )}
+          {equippedItems.includes(20) && (
+            <Image
+              source={require('../../assets/newimages/캣타워(분홍).png')}
+              style={{
+                width: setWidth(100),
+                resizeMode: 'contain',
+                position: 'absolute',
+                bottom: '16%',
+                left: '5%',
+                transform: [{translateY: 120}],
+              }}
+            />
+          )}
+          {equippedItems.includes(21) && (
+            <Image
+              source={require('../../assets/newimages/캣타워(파랑).png')}
+              style={{
+                width: setWidth(100),
+                resizeMode: 'contain',
+                position: 'absolute',
+                bottom: '10%',
+                left: '60%',
+                transform: [{translateY: 120}],
+              }}
+            />
+          )}
+          {equippedItems.includes(28) && (
+            <Image
+              source={require('../../assets/newimages/스크래쳐.png')}
+              style={{
+                width: setWidth(70),
+                resizeMode: 'contain',
+                position: 'absolute',
+                bottom: '10%',
+                left: '1%',
+                transform: [{translateY: 170}],
+              }}
+            />
+          )}
+          {equippedItems.includes(22) && (
+            <Image
+              source={require('../../assets/newimages/화분.png')}
+              style={{
+                width: setWidth(30),
+                resizeMode: 'contain',
+                position: 'absolute',
+                bottom: '8%',
+                left: '84%',
+                transform: [{translateY: 240}],
+              }}
+            />
+          )}
+          {equippedItems.includes(25) && (
+            <Image
+              source={require('../../assets/newimages/사료.png')}
+              style={{
+                width: setWidth(50),
+                resizeMode: 'contain',
+                position: 'absolute',
+                bottom: '10%',
+                left: '80%',
+                transform: [{translateY: 170}],
+              }}
+            />
+          )}
+          {equippedItems.includes(24) && (
+            <Image
+              source={require('../../assets/newimages/털실.png')}
+              style={{
+                width: setWidth(40),
+                resizeMode: 'contain',
+                position: 'absolute',
+                bottom: '8%',
+                left: '30%',
+                transform: [{translateY: 240}],
+              }}
+            />
+          )}
+          {equippedItems.includes(26) && (
+            <Image
+              source={require('../../assets/newimages/방석.png')}
+              style={{
+                width: setWidth(60),
+                resizeMode: 'contain',
+                position: 'absolute',
+                bottom: '8%',
+                left: '1%',
+                transform: [{translateY: 230}],
+              }}
+            />
+          )}
         </View>
+
+        {/* HomeMenuData 부분 추가 */}
         <View
           style={{
             flex: 1,

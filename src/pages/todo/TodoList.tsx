@@ -203,6 +203,7 @@ const TodoList: React.FC = () => {
             <TextInput
               style={styles.input}
               placeholder="할 일을 입력해주세요."
+              keyboardType='default'
               value={editingTodo ? editingTodo.title : newTodoTitle}
               onChangeText={text =>
                 editingTodo

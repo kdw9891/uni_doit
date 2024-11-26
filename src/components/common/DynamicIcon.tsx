@@ -163,7 +163,7 @@ export const ImageItem: React.FC<{
                   {
                     resizeMode: 'contain',
                     width: setWidth(40),
-                    height: setWidth(40),
+                    height: setWidth(40), 
                   },
                 ]}
                 source={
