@@ -7,6 +7,7 @@ import {
   Alert,
   TouchableOpacity,
   ActivityIndicator,
+  Button,
 } from 'react-native';
 import {ScreenProps} from '../../../App';
 import {Header} from './HomeHeader';
@@ -33,6 +34,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isTestMode, setIsTestMode] = useState(false);
   const [equippedItems, setEquippedItems] = useState<number[]>([]);
   const [catImage, setCatImage] = useState(
     require('../../assets/newimages/상자고양이.png'),
@@ -91,6 +93,32 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
       };
     }, []),
   );
+
+  const sendStudyTimeToServer = async (studyTime: number) => {
+    if (globalContext.user && globalContext.user.user_id) {
+      try {
+        console.log(
+          'Sending study time with user_id:',
+          globalContext.user.user_id,
+          'and study_time:',
+          studyTime,
+        );
+        const result = await api('post', '/home/timer', {
+          user_id: globalContext.user.user_id,
+          study_time: studyTime,
+        });
+        homeListhandler();
+        console.log('Study time sent successfully:', result);
+      } catch (error: any) {
+        console.error(
+          'Failed to send study time:',
+          error?.response?.data || error.message,
+        );
+      }
+    } else {
+      console.error('User ID is missing or not set in globalContext.');
+    }
+  };
 
   const loginhandler = async () => {
     const result = await api<any>('get', '/user/login', {
@@ -174,7 +202,7 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
   const resetTimer = () => {
     if (isRunning || timer > 0) {
       setIsRunning(false);
-      const studyTime = Math.floor(timer / 60);
+      const studyTime = isTestMode ? 50 : Math.floor(timer / 60);
       Alert.alert(
         '공부를 멈출꺼냥?',
         `현재 타이머가 멈췄다. 지금까지 ${studyTime}분 공부 중입니다. 시간 초기화할꺼냥?`,
@@ -188,7 +216,9 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
           },
           {
             text: '네',
-            onPress: () => {
+            onPress: async () => {
+              await sendStudyTimeToServer(studyTime);
+              console.log(`총 공부 시간: ${studyTime}분`);
               setTimer(0);
             },
           },
@@ -244,7 +274,6 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
               width: '60%',
               justifyContent: 'space-evenly',
               alignItems: 'center',
-              zIndex: 1,
             }}>
             <TouchableOpacity onPress={resetTimer}>
               <Image
@@ -281,6 +310,11 @@ const Home: React.FC<ScreenProps> = ({navigation}) => {
               />
             </TouchableOpacity>
           </View>
+          <Button
+            title={`테스트 모드: ${isTestMode ? 'ON' : 'OFF'}`}
+            onPress={() => setIsTestMode(!isTestMode)}
+            color={isTestMode ? 'green' : 'gray'}
+          />
         </View>
         <View
           style={{flex: 4.5, justifyContent: 'center', alignItems: 'center'}}>

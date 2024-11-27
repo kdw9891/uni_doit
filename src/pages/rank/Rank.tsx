@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Image, Text, View, ActivityIndicator, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  Image,
+  Text,
+  View,
+  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import {ScreenProps} from '../../../App';
 import {Header} from '../../components/common/Header';
 import {palette} from '../../common/palette';
@@ -78,7 +85,11 @@ const Rank: React.FC<ScreenProps> = ({navigation}) => {
   };
 
   if (loading) {
-    return <ActivityIndicator size="large" color={palette.blue[600]} />;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={palette.blue[600]} />
+      </View>
+    );
   }
 
   return (
@@ -234,6 +245,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: palette.gray[500],
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: palette.gray[100], // 필요하면 배경색 추가
   },
 });
 

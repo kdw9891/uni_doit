@@ -59,7 +59,7 @@ const Inventory: React.FC<ScreenProps> = ({navigation}) => {
 
       setCategories(categoryData);
     } catch (error) {
-      console.error('Error fetching category or items data:', error);
+      
     } finally {
       setIsLoading(false);
     }

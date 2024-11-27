@@ -70,7 +70,7 @@ const api = async <T>(
       data: data.Result && Array.isArray(data.Result) ? data.Result : data,
     };
   } catch (error) {
-    console.error('API 호출 중 에러 발생:', error);
+    
     throw error;
   }
 };
